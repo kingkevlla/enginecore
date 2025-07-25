@@ -2,6 +2,11 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { AdvancedSearch } from "@/components/AdvancedSearch";
+import { CustomerReviews } from "@/components/CustomerReviews";
+import { Newsletter } from "@/components/Newsletter";
+import { Footer } from "@/components/Footer";
+import { AIChatAssistant } from "@/components/AIChatAssistant";
 
 const Index = () => {
   return (
@@ -9,9 +14,14 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
+        <AdvancedSearch />
         <Categories />
         <FeaturedProducts />
+        <CustomerReviews />
+        <Newsletter />
       </main>
+      <Footer />
+      <AIChatAssistant />
     </div>
   );
 };
