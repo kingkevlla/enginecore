@@ -20,13 +20,13 @@ export const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              Car Engines
+            <a href="/" className="text-foreground hover:text-primary transition-colors">
+              Home
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              Motorcycle Engines
+            <a href="/products" className="text-foreground hover:text-primary transition-colors">
+              All Engines
             </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <a href="/products" className="text-foreground hover:text-primary transition-colors">
               Spare Parts
             </a>
             <a href="#" className="text-foreground hover:text-primary transition-colors">
