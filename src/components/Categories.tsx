@@ -1,30 +1,40 @@
 import { Button } from "@/components/ui/button";
 import { Car, Bike, Wrench, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Categories = () => {
+  const navigate = useNavigate();
+  
   const categories = [
     {
       icon: Car,
       title: "Car Engines",
       description: "Premium automotive engines for all vehicle types",
       count: "500+ Models",
-      gradient: "from-blue-500 to-cyan-500"
+      gradient: "from-blue-500 to-cyan-500",
+      categoryKey: "Car Engines"
     },
     {
       icon: Bike,
-      title: "Motorcycle Engines",
+      title: "Motorcycle Engines", 
       description: "High-performance engines for bikes and motorcycles",
       count: "300+ Models",
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-purple-500 to-pink-500",
+      categoryKey: "Motorcycle Engines"
     },
     {
       icon: Wrench,
       title: "Spare Parts",
       description: "Quality spare parts and components for all engines",
       count: "1000+ Parts",
-      gradient: "from-green-500 to-emerald-500"
+      gradient: "from-green-500 to-emerald-500",
+      categoryKey: "Spare Parts"
     }
   ];
+
+  const handleCategoryClick = (categoryKey: string) => {
+    navigate(`/products?category=${encodeURIComponent(categoryKey)}`);
+  };
 
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/20">
@@ -46,6 +56,7 @@ export const Categories = () => {
               <div
                 key={index}
                 className="group relative glass-card p-8 hover-glow cursor-pointer transition-all duration-500"
+                onClick={() => handleCategoryClick(category.categoryKey)}
               >
                 {/* Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${category.gradient} opacity-5 rounded-xl transition-opacity group-hover:opacity-10`} />

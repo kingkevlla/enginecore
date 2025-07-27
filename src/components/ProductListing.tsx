@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Search, Filter, Grid, List, Heart, ShoppingCart, Star, Zap, Fuel, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -214,6 +215,7 @@ const products = [
 ];
 
 export const ProductListing = () => {
+  const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
@@ -222,6 +224,22 @@ export const ProductListing = () => {
   const [priceRange, setPriceRange] = useState([0, 25000]);
   const [sortBy, setSortBy] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Handle URL parameters for category filtering
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) {
+      // Map category names from URL to product categories
+      const categoryMapping: Record<string, string> = {
+        'Car Engines': 'Car Engine',
+        'Motorcycle Engines': 'Motorcycle Engine',
+        'Spare Parts': 'Spare Parts'
+      };
+      
+      const mappedCategory = categoryMapping[categoryParam] || categoryParam;
+      setSelectedCategory(mappedCategory);
+    }
+  }, [searchParams]);
 
   const brands = ["All", "Toyota", "BMW", "Mercedes", "Honda", "Ford", "Nissan"];
   const years = Array.from({ length: 25 }, (_, i) => 2024 - i); // 2024 to 2000
