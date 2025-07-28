@@ -1,7 +1,8 @@
-import { Search, User, Menu } from "lucide-react";
+import { Search, User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
+import { useState } from "react";
 
 interface HeaderProps {
   searchQuery: string;
@@ -9,6 +10,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 w-full glass-card border-b border-white/10">
       <div className="container mx-auto px-4 py-4">
@@ -56,11 +58,52 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="md:hidden"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden mt-4 pb-4">
+            <nav className="flex flex-col space-y-4">
+              <a 
+                href="/" 
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Home
+              </a>
+              <a 
+                href="/products" 
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                All Engines
+              </a>
+              <a 
+                href="/products" 
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Spare Parts
+              </a>
+              <a 
+                href="#" 
+                className="text-foreground hover:text-primary transition-colors py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About
+              </a>
+            </nav>
+          </div>
+        )}
 
         {/* Mobile Search */}
         <div className="lg:hidden mt-4">
