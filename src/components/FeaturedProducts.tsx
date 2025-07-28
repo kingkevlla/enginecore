@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 
-export const FeaturedProducts = () => {
+interface FeaturedProductsProps {
+  onShowAllProducts?: () => void;
+}
+
+export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) => {
   const products = [
     {
       id: 1,
@@ -135,7 +139,7 @@ export const FeaturedProducts = () => {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="tech" size="lg">
+          <Button variant="tech" size="lg" onClick={onShowAllProducts}>
             View All Products
           </Button>
         </div>

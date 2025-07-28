@@ -3,7 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 
-export const Header = () => {
+interface HeaderProps {
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+}
+
+export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full glass-card border-b border-white/10">
       <div className="container mx-auto px-4 py-4">
@@ -39,6 +44,8 @@ export const Header = () => {
             <Input
               placeholder="Search engines, parts, or vehicle models..."
               className="pl-10 bg-muted/50 border-white/10 text-foreground placeholder:text-muted-foreground"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
@@ -61,6 +68,8 @@ export const Header = () => {
             <Input
               placeholder="Search engines, parts, or vehicle models..."
               className="pl-10 bg-muted/50 border-white/10 text-foreground placeholder:text-muted-foreground"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
