@@ -71,35 +71,39 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <nav className="flex flex-col space-y-4">
+          <div className="md:hidden mt-4 pb-4 border-t border-white/10 animate-fade-in">
+            <nav className="flex flex-col space-y-2 pt-4">
               <a 
                 href="/" 
-                className="text-foreground hover:text-primary transition-colors py-2"
+                className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                <span className="w-2 h-2 bg-primary rounded-full"></span>
+                <span>Home</span>
               </a>
               <a 
                 href="/products" 
-                className="text-foreground hover:text-primary transition-colors py-2"
+                className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                All Engines
+                <span className="w-2 h-2 bg-accent rounded-full"></span>
+                <span>All Engines</span>
               </a>
               <a 
                 href="/products" 
-                className="text-foreground hover:text-primary transition-colors py-2"
+                className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Spare Parts
+                <span className="w-2 h-2 bg-secondary rounded-full"></span>
+                <span>Spare Parts</span>
               </a>
               <a 
                 href="#" 
-                className="text-foreground hover:text-primary transition-colors py-2"
+                className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About
+                <span className="w-2 h-2 bg-muted-foreground rounded-full"></span>
+                <span>About</span>
               </a>
             </nav>
           </div>

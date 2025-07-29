@@ -7,6 +7,9 @@ import mercedesEngine from "@/assets/mercedes-v8-engine.jpg";
 import hondaBikeEngine from "@/assets/honda-bike-engine.jpg";
 import fordEngine from "@/assets/ford-v8-engine.jpg";
 import nissanGtrEngine from "@/assets/nissan-gtr-engine.jpg";
+import v12Engine from "@/assets/v12-engine.jpg";
+import electricMotor from "@/assets/electric-motor.jpg";
+import dieselEngine from "@/assets/diesel-engine.jpg";
 
 export const products = [
   // Car Engines - Toyota (2000-2024)
@@ -38,6 +41,15 @@ export const products = [
 
   // Motorcycle Engines - Honda (2000-2024)
   { id: 16, name: "Honda CBR1000RR", brand: "Honda", model: "CBR1000RR", year: "2004-2019", price: 4800, originalPrice: 6200, category: "Motorcycle Engine", type: "Gasoline", cylinders: "4-Cylinder", displacement: "1.0L", power: "189 HP", torque: "85 lb-ft", image: hondaBikeEngine, rating: 4.9, reviews: 234, compatibility: ["CBR1000RR"], condition: "Used", warranty: "12 months", shipping: "Free", inStock: true, stockCount: 14 },
+  
+  // Supercar Engines - Lamborghini (2011-2024)
+  { id: 17, name: "Lamborghini V12 L539", brand: "Lamborghini", model: "L539", year: "2011-2024", price: 45000, originalPrice: 65000, category: "Supercar Engine", type: "Gasoline", cylinders: "V12", displacement: "6.5L", power: "740 HP", torque: "509 lb-ft", image: v12Engine, rating: 5.0, reviews: 34, compatibility: ["Aventador"], condition: "New", warranty: "48 months", shipping: "$500", inStock: true, stockCount: 2 },
+  
+  // Electric Motors - Tesla (2012-2024)  
+  { id: 18, name: "Tesla Model S Plaid Motor", brand: "Tesla", model: "Model S Plaid", year: "2021-2024", price: 12000, originalPrice: 18000, category: "Electric Motor", type: "Electric", cylinders: "N/A", displacement: "N/A", power: "670 HP", torque: "850 lb-ft", image: electricMotor, rating: 4.8, reviews: 127, compatibility: ["Model S", "Model X"], condition: "New", warranty: "60 months", shipping: "$200", inStock: true, stockCount: 6 },
+  
+  // Diesel Engines - Cummins (2007-2024)
+  { id: 19, name: "Cummins ISX15 Diesel", brand: "Cummins", model: "ISX15", year: "2010-2024", price: 28000, originalPrice: 35000, category: "Diesel Engine", type: "Diesel", cylinders: "6-Cylinder", displacement: "15.0L", power: "500 HP", torque: "1850 lb-ft", image: dieselEngine, rating: 4.7, reviews: 89, compatibility: ["Heavy Trucks"], condition: "Rebuilt", warranty: "36 months", shipping: "$400", inStock: false, stockCount: 0 },
 ];
 
 export const useProducts = () => {
