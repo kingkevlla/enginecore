@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Zap, Shield, Truck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-engines.jpg";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -33,12 +36,21 @@ export const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button variant="futuristic" size="xl" className="group">
+            <Button 
+              variant="futuristic" 
+              size="xl" 
+              className="group"
+              onClick={() => navigate('/products')}
+            >
               Explore Engines
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="glass" size="xl">
-              AI Engine Finder
+            <Button 
+              variant="glass" 
+              size="xl"
+              onClick={() => navigate('/used-engines')}
+            >
+              Used Engines
               <Zap className="ml-2 h-5 w-5" />
             </Button>
           </div>

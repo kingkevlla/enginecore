@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface HeaderProps {
   searchQuery: string;
@@ -27,15 +28,15 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="/" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-foreground hover:text-primary transition-colors">
               Home
-            </a>
-            <a href="/products" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <Link to="/products" className="text-foreground hover:text-primary transition-colors">
               All Engines
-            </a>
-            <a href="/products" className="text-foreground hover:text-primary transition-colors">
-              Spare Parts
-            </a>
+            </Link>
+            <Link to="/used-engines" className="text-foreground hover:text-primary transition-colors">
+              Used Engines
+            </Link>
             <a href="#" className="text-foreground hover:text-primary transition-colors">
               About
             </a>
@@ -73,30 +74,30 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
         {isMobileMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-white/10 animate-fade-in">
             <nav className="flex flex-col space-y-2 pt-4">
-              <a 
-                href="/" 
+              <Link 
+                to="/" 
                 className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="w-2 h-2 bg-primary rounded-full"></span>
                 <span>Home</span>
-              </a>
-              <a 
-                href="/products" 
+              </Link>
+              <Link 
+                to="/products" 
                 className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="w-2 h-2 bg-accent rounded-full"></span>
                 <span>All Engines</span>
-              </a>
-              <a 
-                href="/products" 
+              </Link>
+              <Link 
+                to="/used-engines" 
                 className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="w-2 h-2 bg-secondary rounded-full"></span>
-                <span>Spare Parts</span>
-              </a>
+                <span>Used Engines</span>
+              </Link>
               <a 
                 href="#" 
                 className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
