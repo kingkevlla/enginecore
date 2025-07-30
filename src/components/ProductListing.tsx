@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, Filter, Grid, List, Heart, ShoppingCart, Star, Zap, Fuel, Settings } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -63,6 +64,7 @@ const products = [
 ];
 
 export const ProductListing = () => {
+  const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -108,6 +110,29 @@ export const ProductListing = () => {
 
     return matchesSearch && matchesBrand && matchesCategory && matchesPrice && matchesYear;
   });
+
+  const handleAddToCart = (productName: string, inStock: boolean) => {
+    if (!inStock) {
+      toast({
+        title: "Out of Stock",
+        description: `${productName} is currently out of stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Added to Cart",
+      description: `${productName} has been added to your cart.`,
+    });
+  };
+
+  const handleAddToWishlist = (productName: string) => {
+    toast({
+      title: "Added to Wishlist",
+      description: `${productName} has been added to your wishlist.`,
+    });
+  };
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
@@ -229,11 +254,21 @@ export const ProductListing = () => {
               </CardContent>
               
               <CardFooter className="p-4 pt-0 flex gap-2">
-                <Button size="sm" className="flex-1" variant="futuristic">
+                <Button 
+                  size="sm" 
+                  className="flex-1" 
+                  variant="futuristic"
+                  onClick={() => handleAddToCart(product.name, product.inStock)}
+                  disabled={!product.inStock}
+                >
                   <ShoppingCart className="h-3 w-3 mr-1" />
-                  Add to Cart
+                  {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
-                <Button size="sm" variant="outline">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => handleAddToWishlist(product.name)}
+                >
                   <Heart className="h-3 w-3" />
                 </Button>
               </CardFooter>

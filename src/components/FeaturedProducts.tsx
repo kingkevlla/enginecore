@@ -1,12 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Star, ShoppingCart, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface FeaturedProductsProps {
   onShowAllProducts?: () => void;
 }
 
 export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  
+  const handleAddToCart = (productName: string) => {
+    toast({
+      title: "Added to Cart",
+      description: `${productName} has been added to your cart.`,
+    });
+  };
+
+  const handleViewProduct = (productName: string) => {
+    toast({
+      title: "Product Details",
+      description: `Viewing details for ${productName}`,
+    });
+  };
+
   const products = [
     {
       id: 1,
@@ -84,10 +103,19 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
                 
                 {/* Hover Actions */}
                 <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Button size="sm" variant="glass" className="backdrop-blur-md">
+                  <Button 
+                    size="sm" 
+                    variant="glass" 
+                    className="backdrop-blur-md"
+                    onClick={() => handleViewProduct(product.name)}
+                  >
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="futuristic">
+                  <Button 
+                    size="sm" 
+                    variant="futuristic"
+                    onClick={() => handleAddToCart(product.name)}
+                  >
                     <ShoppingCart className="h-4 w-4" />
                   </Button>
                 </div>
@@ -130,7 +158,12 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
                 </div>
 
                 {/* Add to Cart */}
-                <Button variant="futuristic" size="sm" className="w-full">
+                <Button 
+                  variant="futuristic" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={() => handleAddToCart(product.name)}
+                >
                   Add to Cart
                 </Button>
               </div>
@@ -139,7 +172,11 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="tech" size="lg" onClick={onShowAllProducts}>
+          <Button 
+            variant="tech" 
+            size="lg" 
+            onClick={() => navigate('/products')}
+          >
             View All Products
           </Button>
         </div>

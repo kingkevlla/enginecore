@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, ShoppingCart, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   id: number;
@@ -29,6 +30,31 @@ interface SearchResultsProps {
 }
 
 export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
+  const { toast } = useToast();
+  
+  const handleAddToCart = (productName: string, inStock: boolean) => {
+    if (!inStock) {
+      toast({
+        title: "Out of Stock",
+        description: `${productName} is currently out of stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Added to Cart",
+      description: `${productName} has been added to your cart.`,
+    });
+  };
+
+  const handleViewProduct = (productName: string) => {
+    toast({
+      title: "Product Details",
+      description: `Viewing details for ${productName}`,
+    });
+  };
+  
   if (products.length === 0) return null;
 
   return (
@@ -57,10 +83,20 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
                 
                 {/* Hover Actions */}
                 <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Button size="sm" variant="glass" className="backdrop-blur-md">
+                  <Button 
+                    size="sm" 
+                    variant="glass" 
+                    className="backdrop-blur-md"
+                    onClick={() => handleViewProduct(product.name)}
+                  >
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button size="sm" variant="futuristic">
+                  <Button 
+                    size="sm" 
+                    variant="futuristic"
+                    onClick={() => handleAddToCart(product.name, product.inStock)}
+                    disabled={!product.inStock}
+                  >
                     <ShoppingCart className="h-4 w-4" />
                   </Button>
                 </div>
@@ -112,7 +148,13 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
                 </div>
 
                 {/* Add to Cart */}
-                <Button variant="futuristic" size="sm" className="w-full" disabled={!product.inStock}>
+                <Button 
+                  variant="futuristic" 
+                  size="sm" 
+                  className="w-full" 
+                  disabled={!product.inStock}
+                  onClick={() => handleAddToCart(product.name, product.inStock)}
+                >
                   {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
               </CardContent>

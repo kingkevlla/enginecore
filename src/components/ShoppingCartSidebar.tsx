@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ShoppingCart, Plus, Minus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 interface CartItem {
   id: number;
@@ -13,6 +15,8 @@ interface CartItem {
 }
 
 export const ShoppingCartSidebar = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>([
     {
       id: 1,
@@ -35,7 +39,28 @@ export const ShoppingCartSidebar = () => {
   };
 
   const removeItem = (id: number) => {
+    const item = cartItems.find(item => item.id === id);
     setCartItems(cartItems.filter(item => item.id !== id));
+    
+    if (item) {
+      toast({
+        title: "Item Removed",
+        description: `${item.name} has been removed from your cart.`,
+      });
+    }
+  };
+
+  const handleProceedToCheckout = () => {
+    if (cartItems.length === 0) {
+      toast({
+        title: "Cart Empty",
+        description: "Please add items to your cart before proceeding to checkout.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    navigate('/checkout');
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -136,7 +161,12 @@ export const ShoppingCartSidebar = () => {
                 <span className="text-primary">${total.toLocaleString()}</span>
               </div>
               
-              <Button variant="futuristic" size="lg" className="w-full">
+              <Button 
+                variant="futuristic" 
+                size="lg" 
+                className="w-full"
+                onClick={handleProceedToCheckout}
+              >
                 Proceed to Checkout
               </Button>
             </div>
