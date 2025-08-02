@@ -37,9 +37,12 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             <Link to="/used-engines" className="text-foreground hover:text-primary transition-colors">
               Used Engines
             </Link>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/about" className="text-foreground hover:text-primary transition-colors">
               About
-            </a>
+            </Link>
+            <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+              Contact
+            </Link>
           </nav>
 
           {/* Search Bar */}
@@ -98,14 +101,22 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                 <span className="w-2 h-2 bg-secondary rounded-full"></span>
                 <span>Used Engines</span>
               </Link>
-              <a 
-                href="#" 
+              <Link 
+                to="/about" 
                 className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="w-2 h-2 bg-muted-foreground rounded-full"></span>
                 <span>About</span>
-              </a>
+              </Link>
+              <Link 
+                to="/contact" 
+                className="text-foreground hover:text-primary transition-all duration-300 py-3 px-4 rounded-lg hover:bg-muted/50 flex items-center space-x-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="w-2 h-2 bg-destructive rounded-full"></span>
+                <span>Contact</span>
+              </Link>
             </nav>
           </div>
         )}
