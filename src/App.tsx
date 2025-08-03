@@ -17,6 +17,8 @@ import PaymentMethods from "./pages/PaymentMethods";
 import TechnicalSupport from "./pages/TechnicalSupport";
 import LiveChat from "./pages/LiveChat";
 import FAQs from "./pages/FAQs";
+import Login from "./pages/Login";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/returns-refunds" element={<ReturnsRefunds />} />
           <Route path="/shipping-info" element={<ShippingInfo />} />

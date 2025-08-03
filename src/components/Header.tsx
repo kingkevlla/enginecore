@@ -17,21 +17,23 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full">
       {/* Promotional Banner */}
-      <div className="bg-gradient-to-r from-primary to-accent text-white py-2 px-4">
+      <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white py-2 px-4">
         <div className="container mx-auto flex items-center justify-center text-sm font-medium">
           <span className="mr-4">🔥 ALL ENGINES 30% OFF</span>
-          <Button 
-            size="sm" 
-            variant="secondary" 
-            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-1 text-xs"
-          >
-            VIEW STOCK »
-          </Button>
+          <Link to="/products">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-1 text-xs"
+            >
+              VIEW STOCK »
+            </Button>
+          </Link>
         </div>
       </div>
 
       {/* Main Header */}
-      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border automotive-pattern">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Left: Menu + Logo */}
@@ -64,32 +66,32 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             {/* Right: Favorites, Login, Cart */}
             <div className="flex items-center space-x-6">
               {/* Favorites */}
-              <div className="flex flex-col items-center">
+              <Link to="/wishlist" className="flex flex-col items-center hover:text-primary transition-colors group">
                 <div className="relative">
-                  <Heart className="h-6 w-6 text-foreground" />
+                  <Heart className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     0
                   </span>
                 </div>
-                <span className="text-xs text-muted-foreground mt-1">Favorites</span>
-              </div>
+                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Favorites</span>
+              </Link>
 
               {/* Login */}
-              <div className="flex flex-col items-center">
-                <User className="h-6 w-6 text-foreground" />
-                <span className="text-xs text-muted-foreground mt-1">Login</span>
-              </div>
+              <Link to="/login" className="flex flex-col items-center hover:text-primary transition-colors group">
+                <User className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
+                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Login</span>
+              </Link>
 
               {/* Cart */}
-              <div className="flex flex-col items-center">
+              <Link to="/checkout" className="flex flex-col items-center hover:text-primary transition-colors group">
                 <div className="relative">
-                  <ShoppingCart className="h-6 w-6 text-foreground" />
+                  <ShoppingCart className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
                   <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     0
                   </span>
                 </div>
-                <span className="text-xs text-muted-foreground mt-1">Cart</span>
-              </div>
+                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Cart</span>
+              </Link>
             </div>
           </div>
         </div>

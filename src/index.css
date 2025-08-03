@@ -85,6 +85,30 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* Automotive Background Pattern */
+  .automotive-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+      linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(255, 255, 255, 0.02) 100%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 20px 20px;
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+  }
+
+  /* Engine parts subtle background */
+  .engine-pattern {
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.02'%3E%3Cpath d='M30 30a6 6 0 1 1-12 0 6 6 0 0 1 12 0zm6-6a6 6 0 1 1-12 0 6 6 0 0 1 12 0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Gear pattern for technical sections */
+  .gear-pattern {
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M20 20.5V18H18v2.5c0 .3-.2.5-.5.5h-2c-.3 0-.5-.2-.5-.5V18h-2v2.5c0 1.4 1.1 2.5 2.5 2.5h2c1.4 0 2.5-1.1 2.5-2.5z' transform='translate(0 -5)'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  }
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
