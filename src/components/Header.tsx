@@ -1,9 +1,10 @@
-import { Search, User, Menu, X, Heart, ShoppingCart, Car, Wrench, Mail } from "lucide-react";
+import { Search, User, Menu, X, Heart, ShoppingCart, Car, Wrench, Mail, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "@/components/ThemeProvider";
 import engineLogo from "@/assets/engine-logo.png";
 
 interface HeaderProps {
@@ -13,6 +14,7 @@ interface HeaderProps {
 
 export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
   
   return (
     <header className="sticky top-0 z-50 w-full">
@@ -63,7 +65,7 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
               </Link>
             </div>
 
-            {/* Right: Favorites, Login, Cart */}
+            {/* Right: Favorites, Login, Cart, Theme Toggle */}
             <div className="flex items-center space-x-6">
               {/* Favorites */}
               <Link to="/wishlist" className="flex flex-col items-center hover:text-primary transition-colors group">
@@ -92,6 +94,25 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                 </div>
                 <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Cart</span>
               </Link>
+
+              {/* Theme Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="flex flex-col items-center hover:text-primary transition-colors group h-auto py-2 px-3"
+              >
+                <div className="flex items-center justify-center h-6 w-6">
+                  {theme === "light" ? (
+                    <Moon className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
+                  ) : (
+                    <Sun className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
+                  )}
+                </div>
+                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">
+                  {theme === "light" ? "Dark" : "Light"}
+                </span>
+              </Button>
             </div>
           </div>
         </div>
