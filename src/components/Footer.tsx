@@ -70,14 +70,14 @@ export const Footer = () => {
               <h4 className="text-lg font-semibold mb-6 font-['Orbitron']">Support</h4>
               <ul className="space-y-3">
                 {[
-                  { label: "Help Center", href: "/contact" },
+                  { label: "Help Center", href: "/help-center" },
                   { label: "Contact Support", href: "/contact" },
-                  { label: "Returns & Refunds", href: "/contact" },
-                  { label: "Shipping Info", href: "/contact" },
-                  { label: "Payment Methods", href: "/contact" },
-                  { label: "Technical Support", href: "/contact" },
-                  { label: "Live Chat", href: "/contact" },
-                  { label: "FAQs", href: "/contact" }
+                  { label: "Returns & Refunds", href: "/returns-refunds" },
+                  { label: "Shipping Info", href: "/shipping-info" },
+                  { label: "Payment Methods", href: "/payment-methods" },
+                  { label: "Technical Support", href: "/technical-support" },
+                  { label: "Live Chat", href: "/live-chat" },
+                  { label: "FAQs", href: "/faqs" }
                 ].map((link) => (
                   <li key={link.label}>
                     <Link to={link.href} className="text-muted-foreground hover:text-primary transition-colors text-sm">

@@ -10,6 +10,13 @@ import UsedEngines from "./pages/UsedEngines";
 import CheckoutPage from "./pages/CheckoutPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import HelpCenter from "./pages/HelpCenter";
+import ReturnsRefunds from "./pages/ReturnsRefunds";
+import ShippingInfo from "./pages/ShippingInfo";
+import PaymentMethods from "./pages/PaymentMethods";
+import TechnicalSupport from "./pages/TechnicalSupport";
+import LiveChat from "./pages/LiveChat";
+import FAQs from "./pages/FAQs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +35,13 @@ const App = () => (
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/returns-refunds" element={<ReturnsRefunds />} />
+          <Route path="/shipping-info" element={<ShippingInfo />} />
+          <Route path="/payment-methods" element={<PaymentMethods />} />
+          <Route path="/technical-support" element={<TechnicalSupport />} />
+          <Route path="/live-chat" element={<LiveChat />} />
+          <Route path="/faqs" element={<FAQs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
