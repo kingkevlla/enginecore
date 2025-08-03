@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import engineLogo from "@/assets/engine-logo.png";
 
 interface HeaderProps {
   searchQuery: string;
@@ -17,14 +18,16 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl font-['Orbitron']">E</span>
-            </div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src={engineLogo} 
+              alt="A class Verified Engine Logo" 
+              className="w-10 h-10 object-contain"
+            />
             <h1 className="text-2xl font-bold font-['Orbitron'] text-gradient">
-              EngineCore
+              A class Verified Engine
             </h1>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

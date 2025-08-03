@@ -1,5 +1,7 @@
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, CreditCard, Truck, Shield, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import engineLogo from "@/assets/engine-logo.png";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,12 +14,14 @@ export const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="space-y-6">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-xl font-['Orbitron']">E</span>
-                </div>
+              <div className="flex items-center space-x-3">
+                <img 
+                  src={engineLogo} 
+                  alt="A class Verified Engine Logo" 
+                  className="w-12 h-12 object-contain"
+                />
                 <h3 className="text-2xl font-bold font-['Orbitron'] text-gradient">
-                  EngineCore
+                  A class Verified Engine
                 </h3>
               </div>
               <p className="text-muted-foreground leading-relaxed">
@@ -36,7 +40,7 @@ export const Footer = () => {
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Mail className="h-4 w-4 text-primary" />
-                  <span>support@enginecore.com</span>
+                  <span>support@aclassverifiedengine.com</span>
                 </div>
               </div>
             </div>
@@ -46,19 +50,16 @@ export const Footer = () => {
               <h4 className="text-lg font-semibold mb-6 font-['Orbitron']">Quick Links</h4>
               <ul className="space-y-3">
                 {[
-                  "Car Engines",
-                  "Motorcycle Engines", 
-                  "Spare Parts",
-                  "AI Engine Finder",
-                  "Compatibility Checker",
-                  "Installation Services",
-                  "Warranty Info",
-                  "Track Order"
+                  { label: "All Engines", href: "/products" },
+                  { label: "Used Engines", href: "/used-engines" }, 
+                  { label: "About Us", href: "/about" },
+                  { label: "Contact", href: "/contact" },
+                  { label: "Checkout", href: "/checkout" }
                 ].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                      {link}
-                    </a>
+                  <li key={link.label}>
+                    <Link to={link.href} className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -143,9 +144,9 @@ export const Footer = () => {
         <div className="border-t border-white/10 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-muted-foreground text-center md:text-left">
-              © {currentYear} EngineCore. All rights reserved. | 
-              <a href="#" className="hover:text-primary ml-1">Privacy Policy</a> | 
-              <a href="#" className="hover:text-primary ml-1">Terms of Service</a>
+              © {currentYear} A class Verified Engine. All rights reserved. | 
+              <Link to="/about" className="hover:text-primary ml-1">Privacy Policy</Link> | 
+              <Link to="/contact" className="hover:text-primary ml-1">Terms of Service</Link>
             </div>
             
             <div className="flex items-center gap-6">
