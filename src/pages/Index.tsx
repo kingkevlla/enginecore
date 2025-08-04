@@ -34,7 +34,7 @@ const Index = () => {
   };
 
 return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gray-50">
       <Header searchQuery={searchQuery} onSearchChange={handleSearchChange} />
       
       {showSearchResults && (
@@ -51,12 +51,18 @@ return (
         />
       )}
       
-      {/* Hide other components to match the reference minimalist design */}
       {!showSearchResults && !showAllProducts && (
-        <main className="bg-black">
-          {/* Content area - keeping minimal like the reference */}
+        <main className="space-y-16 py-16">
+          <Hero />
+          <Categories />
+          <FeaturedProducts />
+          <CustomerReviews />
+          <Newsletter />
         </main>
       )}
+      
+      <Footer />
+      <AIChatAssistant />
     </div>
   );
 };
