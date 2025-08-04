@@ -1,11 +1,8 @@
-import { Search, User, Menu, X, Heart, ShoppingCart, Car, Wrench, Mail, Sun, Moon } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useTheme } from "@/components/ThemeProvider";
-import engineLogo from "@/assets/engine-logo.png";
 
 interface HeaderProps {
   searchQuery: string;
@@ -14,210 +11,121 @@ interface HeaderProps {
 
 export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
   
   return (
-    <header className="sticky top-0 z-50 w-full">
-      {/* Promotional Banner */}
-      <div className="bg-gradient-to-r from-red-600 via-red-500 to-orange-500 text-white py-2 px-4">
-        <div className="container mx-auto flex items-center justify-center text-sm font-medium">
-          <span className="mr-4">🔥 ALL ENGINES 30% OFF</span>
-          <Link to="/products">
-            <Button 
-              size="sm" 
-              variant="secondary" 
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-1 text-xs"
-            >
-              VIEW STOCK »
-            </Button>
-          </Link>
+    <header className="w-full bg-black">
+      {/* Top Banner */}
+      <div className="bg-gray-800 text-white py-2 px-4 text-center">
+        <div className="flex items-center justify-center space-x-4 text-sm">
+          <span>FREE SHIPPING ON SELECT ITEMS!</span>
+          <span>PHONE: 719-630-3236</span>
         </div>
       </div>
 
-      {/* Main Header */}
-      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border automotive-pattern">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            {/* Left: Menu + Logo */}
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-foreground hover:bg-muted"
-              >
-                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                <span className="sr-only">Menu</span>
-              </Button>
-              
-              <Link to="/" className="flex items-center space-x-2">
-                <img 
-                  src={engineLogo} 
-                  alt="A class Verified Engine Logo" 
-                  className="w-8 h-8 object-contain"
-                />
-                <div className="flex flex-col">
-                  <span className="text-sm font-bold text-primary uppercase tracking-wide">A CLASS</span>
-                  <span className="text-lg font-bold text-foreground font-['Orbitron'] -mt-1">
-                    VERIFIED ENGINE
-                  </span>
-                </div>
-              </Link>
-            </div>
+      {/* Mobile menu toggle */}
+      <div className="md:hidden bg-black px-4 py-3 flex justify-between items-center">
+        <button 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="text-white"
+        >
+          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <span className="text-2xl">☰</span>}
+        </button>
+        <div className="text-center">
+          <span className="text-orange-400 text-lg font-bold">APR AUTO</span>
+          <p className="text-xs text-gray-400">JOIN THE FUN !!</p>
+        </div>
+      </div>
 
-            {/* Right: Favorites, Login, Cart, Theme Toggle */}
-            <div className="flex items-center space-x-6">
-              {/* Favorites */}
-              <Link to="/wishlist" className="flex flex-col items-center hover:text-primary transition-colors group">
-                <div className="relative">
-                  <Heart className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    0
-                  </span>
-                </div>
-                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Favorites</span>
-              </Link>
-
-              {/* Login */}
-              <Link to="/login" className="flex flex-col items-center hover:text-primary transition-colors group">
-                <User className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
-                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Login</span>
-              </Link>
-
-              {/* Cart */}
-              <Link to="/checkout" className="flex flex-col items-center hover:text-primary transition-colors group">
-                <div className="relative">
-                  <ShoppingCart className="h-6 w-6 text-foreground group-hover:text-primary transition-colors" />
-                  <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    0
-                  </span>
-                </div>
-                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">Cart</span>
-              </Link>
-
-              {/* Theme Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                className="flex flex-col items-center hover:text-primary transition-colors group h-auto py-2 px-3"
-              >
-                <div className="flex items-center justify-center h-6 w-6">
-                  {theme === "light" ? (
-                    <Moon className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
-                  ) : (
-                    <Sun className="h-5 w-5 text-foreground group-hover:text-primary transition-colors" />
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground mt-1 group-hover:text-primary transition-colors">
-                  {theme === "light" ? "Dark" : "Light"}
-                </span>
-              </Button>
-            </div>
-          </div>
+      {/* Desktop Logo */}
+      <div className="hidden md:block bg-black py-6 text-center">
+        <div className="text-center">
+          <span className="text-orange-400 text-2xl font-bold">APR AUTO</span>
+          <p className="text-sm text-gray-400 mt-1">JOIN THE FUN !!</p>
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="bg-muted/30 py-3 px-4">
-        <div className="container mx-auto">
-          <div className="relative max-w-2xl mx-auto">
-            <Input
-              placeholder="Search for Auto Parts, Engines..."
-              className="pl-4 pr-12 py-3 bg-white border-border text-foreground placeholder:text-muted-foreground rounded-lg"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-            />
-            <Button 
-              size="sm" 
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white px-6"
-            >
-              <Search className="h-4 w-4 mr-2" />
-              SEARCH
-            </Button>
+      <div className="bg-gray-900 py-6 px-4">
+        <div className="search-container">
+          <Input
+            placeholder="SEARCH THE STORE"
+            className="search-input"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Navigation Menu - Desktop */}
+      <nav className="hidden md:block bg-black px-4 py-8">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <Link to="/products" className="menu-item block py-2">
+            BRAND NEW ENGINES
+          </Link>
+          <div className="menu-item block py-2 flex items-center justify-between">
+            <span>REBUILT ENGINES</span>
+            <span className="nav-arrow">▶</span>
           </div>
+          <div className="menu-item block py-2 flex items-center justify-between">
+            <span>HEADS</span>
+            <span className="nav-arrow">▶</span>
+          </div>
+          <div className="menu-item block py-2 flex items-center justify-between">
+            <span>TIMING COMPONENTS</span>
+            <span className="nav-arrow">▶</span>
+          </div>
+          <Link to="/shipping" className="menu-item block py-2">
+            PREMIER SHIPPING
+          </Link>
+          <div className="menu-item block py-2 flex items-center justify-between">
+            <span>PARTS</span>
+            <span className="nav-arrow">▶</span>
+          </div>
+          <Link to="/warranty" className="menu-item block py-2">
+            PREMIER WARRANTIES
+          </Link>
+          <Link to="/login" className="menu-item block py-2 mt-8">
+            SIGN IN
+          </Link>
+          <Link to="/register" className="menu-item block py-2">
+            REGISTER
+          </Link>
         </div>
-      </div>
-
-      {/* Navigation Bar */}
-      <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 py-2">
-          <nav className="flex items-center justify-between">
-            {/* Left Navigation */}
-            <div className="flex items-center space-x-8">
-              <Link 
-                to="/used-engines" 
-                className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2"
-              >
-                <Car className="h-5 w-5" />
-                <span className="font-medium">Used Engines</span>
-              </Link>
-              
-              <Link 
-                to="/products" 
-                className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2"
-              >
-                <Wrench className="h-5 w-5" />
-                <div className="flex flex-col">
-                  <span className="text-xs text-green-600 font-medium">New & Used</span>
-                  <span className="font-medium -mt-1">Auto Parts</span>
-                </div>
-              </Link>
-            </div>
-
-            {/* Right Navigation */}
-            <Link 
-              to="/contact" 
-              className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors py-2"
-            >
-              <Mail className="h-5 w-5" />
-              <span className="font-medium">Contact</span>
-            </Link>
-          </nav>
-        </div>
-      </div>
+      </nav>
 
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
-        <div className="bg-background border-b border-border animate-fade-in">
-          <nav className="container mx-auto px-4 py-4 space-y-2">
-            <Link 
-              to="/" 
-              className="block py-3 px-4 text-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
+        <nav className="md:hidden bg-black px-4 py-6">
+          <div className="space-y-4">
+            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              BRAND NEW ENGINES
             </Link>
-            <Link 
-              to="/products" 
-              className="block py-3 px-4 text-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              All Engines
+            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              REBUILT ENGINES
             </Link>
-            <Link 
-              to="/used-engines" 
-              className="block py-3 px-4 text-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Used Engines
+            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              HEADS
             </Link>
-            <Link 
-              to="/about" 
-              className="block py-3 px-4 text-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
+            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              TIMING COMPONENTS
             </Link>
-            <Link 
-              to="/contact" 
-              className="block py-3 px-4 text-foreground hover:text-primary hover:bg-muted rounded-lg transition-all duration-300"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact
+            <Link to="/shipping" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              PREMIER SHIPPING
             </Link>
-          </nav>
-        </div>
+            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              PARTS
+            </Link>
+            <Link to="/warranty" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              PREMIER WARRANTIES
+            </Link>
+            <Link to="/login" className="menu-item block py-2 mt-6" onClick={() => setIsMobileMenuOpen(false)}>
+              SIGN IN
+            </Link>
+            <Link to="/register" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              REGISTER
+            </Link>
+          </div>
+        </nav>
       )}
     </header>
   );
