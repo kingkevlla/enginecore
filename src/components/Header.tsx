@@ -59,28 +59,24 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       {/* Navigation Menu - Desktop */}
       <nav className="hidden md:block bg-black px-4 py-8">
         <div className="max-w-4xl mx-auto space-y-6">
-          <Link to="/products" className="menu-item block py-2">
+          <Link to="/brand-new-engines" className="menu-item block py-2">
             BRAND NEW ENGINES
           </Link>
-          <div className="menu-item block py-2 flex items-center justify-between">
-            <span>REBUILT ENGINES</span>
-            <span className="nav-arrow">▶</span>
-          </div>
-          <div className="menu-item block py-2 flex items-center justify-between">
-            <span>HEADS</span>
-            <span className="nav-arrow">▶</span>
-          </div>
-          <div className="menu-item block py-2 flex items-center justify-between">
-            <span>TIMING COMPONENTS</span>
-            <span className="nav-arrow">▶</span>
-          </div>
+          <Link to="/rebuilt-engines" className="menu-item block py-2">
+            REBUILT ENGINES
+          </Link>
+          <Link to="/heads" className="menu-item block py-2">
+            HEADS
+          </Link>
+          <Link to="/timing-components" className="menu-item block py-2">
+            TIMING COMPONENTS
+          </Link>
           <Link to="/shipping" className="menu-item block py-2">
             PREMIER SHIPPING
           </Link>
-          <div className="menu-item block py-2 flex items-center justify-between">
-            <span>PARTS</span>
-            <span className="nav-arrow">▶</span>
-          </div>
+          <Link to="/parts" className="menu-item block py-2">
+            PARTS
+          </Link>
           <Link to="/warranty" className="menu-item block py-2">
             PREMIER WARRANTIES
           </Link>
@@ -97,22 +93,22 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       {isMobileMenuOpen && (
         <nav className="md:hidden bg-black px-4 py-6">
           <div className="space-y-4">
-            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/brand-new-engines" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               BRAND NEW ENGINES
             </Link>
-            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/rebuilt-engines" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               REBUILT ENGINES
             </Link>
-            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/heads" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               HEADS
             </Link>
-            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/timing-components" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               TIMING COMPONENTS
             </Link>
             <Link to="/shipping" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               PREMIER SHIPPING
             </Link>
-            <Link to="/products" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link to="/parts" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               PARTS
             </Link>
             <Link to="/warranty" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>

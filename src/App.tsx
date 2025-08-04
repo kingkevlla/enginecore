@@ -20,6 +20,11 @@ import FAQs from "./pages/FAQs";
 import Login from "./pages/Login";
 import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
+import BrandNewEngines from "./pages/BrandNewEngines";
+import RebuiltEngines from "./pages/RebuiltEngines";
+import Heads from "./pages/Heads";
+import TimingComponents from "./pages/TimingComponents";
+import Parts from "./pages/Parts";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +38,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/brand-new-engines" element={<BrandNewEngines />} />
+          <Route path="/rebuilt-engines" element={<RebuiltEngines />} />
+          <Route path="/heads" element={<Heads />} />
+          <Route path="/timing-components" element={<TimingComponents />} />
+          <Route path="/parts" element={<Parts />} />
           <Route path="/used-engines" element={<UsedEngines />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/about" element={<AboutPage />} />
