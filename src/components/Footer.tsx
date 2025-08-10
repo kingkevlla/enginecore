@@ -146,7 +146,8 @@ export const Footer = () => {
             <div className="text-sm text-muted-foreground text-center md:text-left">
               © {currentYear} A class Verified Engine. All rights reserved. | 
               <Link to="/about" className="hover:text-primary ml-1">Privacy Policy</Link> | 
-              <Link to="/contact" className="hover:text-primary ml-1">Terms of Service</Link>
+              <Link to="/contact" className="hover:text-primary ml-1">Terms of Service</Link> |
+              <Link to="/admin/login" className="hover:text-primary ml-1 opacity-60">Admin</Link>
             </div>
             
             <div className="flex items-center gap-6">
