@@ -25,6 +25,11 @@ import RebuiltEngines from "./pages/RebuiltEngines";
 import Heads from "./pages/Heads";
 import TimingComponents from "./pages/TimingComponents";
 import Parts from "./pages/Parts";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
+import AdminSettings from "./pages/AdminSettings";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +61,12 @@ const App = () => (
           <Route path="/technical-support" element={<TechnicalSupport />} />
           <Route path="/live-chat" element={<LiveChat />} />
           <Route path="/faqs" element={<FAQs />} />
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/admin/orders" element={<AdminOrders />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
