@@ -22,14 +22,14 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      // First try to sign in
+      // Try to sign in first
       const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (signInError) {
-        // If sign in fails, try to sign up the admin user
+        // If login fails, try to sign up
         if (signInError.message.includes('Invalid login credentials')) {
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email,
@@ -41,63 +41,22 @@ export default function AdminLogin() {
 
           if (signUpError) throw signUpError;
 
-          if (signUpData.user) {
-            // Check if user is admin (trigger should have created admin record)
-            const { data: adminData, error: adminError } = await supabase
-              .from('admin_users')
-              .select('*')
-              .eq('user_id', signUpData.user.id)
-              .eq('is_active', true)
-              .single();
-
-            if (adminError || !adminData) {
-              // Manually create admin record if trigger didn't work
-              const { error: createAdminError } = await supabase
-                .from('admin_users')
-                .insert({
-                  user_id: signUpData.user.id,
-                  role: 'admin',
-                  is_active: true,
-                  permissions: { full_access: true },
-                });
-
-              if (createAdminError) {
-                console.error('Failed to create admin record:', createAdminError);
-              }
-            }
-
-            toast({
-              title: "Admin account created successfully",
-              description: "Welcome to the admin dashboard",
-            });
-
-            navigate('/admin');
-            return;
-          }
+          toast({
+            title: "Account created successfully",
+            description: "Please check your email to verify your account",
+          });
+          return;
         } else {
           throw signInError;
         }
       }
 
-      // If sign in was successful, check admin privileges
+      // Sign in successful
       if (signInData?.user) {
-        const { data: adminData, error: adminError } = await supabase
-          .from('admin_users')
-          .select('*')
-          .eq('user_id', signInData.user.id)
-          .eq('is_active', true)
-          .single();
-
-        if (adminError || !adminData) {
-          await supabase.auth.signOut();
-          throw new Error('Access denied. Admin privileges required.');
-        }
-
         toast({
           title: "Login successful",
           description: "Welcome to the admin dashboard",
         });
-
         navigate('/admin');
       }
     } catch (error: any) {
