@@ -42,9 +42,11 @@ export default function AdminLogin() {
           if (signUpError) throw signUpError;
 
           toast({
-            title: "Account created successfully",
-            description: "Please check your email to verify your account",
+            title: "Account created and logged in successfully",
+            description: "Welcome to the admin dashboard",
           });
+          
+          navigate('/admin');
           return;
         } else {
           throw signInError;
