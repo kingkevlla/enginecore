@@ -34,12 +34,38 @@ export default function AdminLogin() {
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email,
             password,
-            options: {
-              emailRedirectTo: `${window.location.origin}/admin`,
-            },
           });
 
           if (signUpError) throw signUpError;
+
+          // Wait a moment for the user to be created
+          await new Promise(resolve => setTimeout(resolve, 1000));
+
+          // Create admin user record
+          if (signUpData?.user) {
+            const { error: adminError } = await supabase
+              .from('admin_users')
+              .insert([
+                {
+                  user_id: signUpData.user.id,
+                  role: 'admin',
+                  is_active: true,
+                  permissions: { full_access: true },
+                }
+              ]);
+
+            if (adminError) {
+              console.error('Admin user creation error:', adminError);
+            }
+          }
+
+          // Sign in the newly created user immediately
+          const { data: autoSignIn, error: autoSignInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (autoSignInError) throw autoSignInError;
 
           toast({
             title: "Account created and logged in successfully",
