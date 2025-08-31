@@ -1,26 +1,33 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Json } from "@/integrations/supabase/types";
+import { ProductDetailsModal } from "./ProductDetailsModal";
 
 interface Product {
   id: string;
   name: string;
   short_description: string | null;
+  description: string | null;
   price: number;
+  compare_price: number | null;
   images: Json | null;
   brand: string | null;
+  stock_quantity: number | null;
+  specifications: Json | null;
 }
 
 export const ImageCardsSection = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
         const { data, error } = await supabase
           .from('products')
-          .select('id, name, short_description, price, images, brand')
+          .select('id, name, short_description, description, price, compare_price, images, brand, stock_quantity, specifications')
           .eq('is_featured', true)
           .eq('is_active', true)
           .limit(6);
@@ -37,13 +44,36 @@ export const ImageCardsSection = () => {
     fetchFeaturedProducts();
   }, []);
 
-  const getImageUrl = (images: Json | null) => {
+  const getImageUrls = (images: Json | null): string[] => {
     if (!images || !Array.isArray(images) || images.length === 0) {
-      return "/placeholder.svg";
+      return ["/placeholder.svg"];
     }
-    const firstImage = images[0] as { url?: string };
-    return firstImage?.url || "/placeholder.svg";
+    return images.map((img: any) => img?.url || "/placeholder.svg");
   };
+
+  const getCurrentImageUrl = (productId: string, images: Json | null) => {
+    const imageUrls = getImageUrls(images);
+    const currentIndex = currentImageIndex[productId] || 0;
+    return imageUrls[currentIndex];
+  };
+
+  // Auto-slide images every 40 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex(prev => {
+        const newIndices = { ...prev };
+        products.forEach(product => {
+          const imageUrls = getImageUrls(product.images);
+          if (imageUrls.length > 1) {
+            newIndices[product.id] = ((prev[product.id] || 0) + 1) % imageUrls.length;
+          }
+        });
+        return newIndices;
+      });
+    }, 40000); // 40 seconds
+
+    return () => clearInterval(interval);
+  }, [products]);
 
   if (loading) {
     return (
@@ -81,16 +111,33 @@ export const ImageCardsSection = () => {
           {products.map((product, index) => (
             <div
               key={product.id}
-              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in"
+              className="group relative overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in cursor-pointer"
               style={{ animationDelay: `${index * 0.1}s` }}
+              onClick={() => setSelectedProduct(product)}
             >
               {/* Image Background */}
               <div className="relative h-80 overflow-hidden">
                 <img
-                  src={getImageUrl(product.images)}
+                  src={getCurrentImageUrl(product.id, product.images)}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+                
+                {/* Image indicators */}
+                {getImageUrls(product.images).length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                    {getImageUrls(product.images).map((_, imgIndex) => (
+                      <div
+                        key={imgIndex}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          (currentImageIndex[product.id] || 0) === imgIndex 
+                            ? 'bg-white' 
+                            : 'bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
                 
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300"></div>
@@ -149,6 +196,13 @@ export const ImageCardsSection = () => {
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </button>
         </div>
+
+        {/* Product Details Modal */}
+        <ProductDetailsModal
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
       </div>
     </section>
   );

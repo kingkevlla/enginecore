@@ -628,18 +628,18 @@ export default function AdminProducts() {
                   onChange={(e) => setFormData({ ...formData, fuel_type: e.target.value })}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="condition">Condition</Label>
-                <Input
-                  id="condition"
-                  value={formData.condition}
-                  onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="condition">Condition</Label>
+              <Input
+                id="condition"
+                value={formData.condition}
+                onChange={(e) => setFormData({ ...formData, condition: e.target.value })}
+              />
             </div>
+          </div>
 
 
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <Switch
                   id="is_active"
