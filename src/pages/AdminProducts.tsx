@@ -183,11 +183,11 @@ export default function AdminProducts() {
       displacement: product.displacement || '',
       fuel_type: product.fuel_type || '',
       condition: product.condition || 'new',
-      category_id: '',
+      category_id: '', // Will be populated from product data if available
       stock_quantity: product.stock_quantity?.toString() || '0',
       is_active: product.is_active,
       is_featured: product.is_featured,
-      images: product.images || [''],
+      images: Array.isArray(product.images) ? product.images : (product.images ? [product.images] : ['']),
     });
     setSelectedProduct(product);
     setIsEditing(true);
@@ -584,6 +584,24 @@ export default function AdminProducts() {
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <select
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                  value={formData.category_id}
+                  onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <Label htmlFor="engine_type">Engine Type</Label>
                 <Input
                   id="engine_type"
@@ -620,19 +638,6 @@ export default function AdminProducts() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="images">Image URLs (one per line)</Label>
-              <Textarea
-                id="images"
-                value={formData.images.join('\n')}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  images: e.target.value.split('\n').filter(url => url.trim() !== '')
-                })}
-                rows={3}
-                placeholder="https://example.com/image1.jpg"
-              />
-            </div>
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
