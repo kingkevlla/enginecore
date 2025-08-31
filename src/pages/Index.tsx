@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Categories } from "@/components/Categories";
 import { FeaturedProducts } from "@/components/FeaturedProducts";
+import { ImageCardsSection } from "@/components/ImageCardsSection";
 import { CustomerReviews } from "@/components/CustomerReviews";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
@@ -52,9 +53,10 @@ return (
       )}
       
       {!showSearchResults && !showAllProducts && (
-        <main className="space-y-16 py-16">
+        <main className="space-y-0">
           <Hero />
           <Categories />
+          <ImageCardsSection />
           <FeaturedProducts />
           <CustomerReviews />
           <Newsletter />
