@@ -29,8 +29,8 @@ export default function AdminLogin() {
       });
 
       if (signInError) {
-        // If login fails, try to sign up
-        if (signInError.message.includes('Invalid login credentials')) {
+        // If login fails, try to sign up or handle unconfirmed email
+        if (signInError.message.includes('Invalid login credentials') || signInError.message.includes('Email not confirmed')) {
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email,
             password,
