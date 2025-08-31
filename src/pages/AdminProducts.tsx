@@ -251,6 +251,51 @@ export default function AdminProducts() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      const newImages = [...formData.images];
+      newImages[index] = data.publicUrl;
+      setFormData({ ...formData, images: newImages });
+
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const addImageField = () => {
+    setFormData({ ...formData, images: [...formData.images, ''] });
+  };
+
+  const removeImageField = (index: number) => {
+    const newImages = formData.images.filter((_, i) => i !== index);
+    setFormData({ ...formData, images: newImages });
+  };
+
   const handleDeleteProduct = async (productId: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
@@ -461,6 +506,40 @@ export default function AdminProducts() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={4}
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="images">Product Images</Label>
+              <div className="space-y-2">
+                {formData.images.map((image, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, index)}
+                      className="flex-1"
+                    />
+                    {formData.images.length > 1 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeImageField(index)}
+                      >
+                        Remove
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addImageField}
+                >
+                  Add Another Image
+                </Button>
+              </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4">

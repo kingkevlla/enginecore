@@ -652,6 +652,10 @@ export type Database = {
         Args: { _user_id: string }
         Returns: boolean
       }
+      is_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       setup_admin_user: {
         Args: { admin_email: string; admin_user_id?: string }
         Returns: undefined
