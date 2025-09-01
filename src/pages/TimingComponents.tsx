@@ -1,4 +1,5 @@
 import { DynamicProductPage } from "@/components/DynamicProductPage";
+import { ImageCardsSection } from "@/components/ImageCardsSection";
 import { Settings, Star, Calendar } from "lucide-react";
 
 export default function TimingComponents() {
