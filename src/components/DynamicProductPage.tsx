@@ -7,7 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AIChatAssistant } from "@/components/AIChatAssistant";
-import { Star, ShoppingCart, Calendar, Gauge, Fuel, Settings, Heart } from "lucide-react";
+import { QuickBuyModal } from "@/components/QuickBuyModal";
+import { useCart } from "@/hooks/useCart";
+import { Star, ShoppingCart, Calendar, Gauge, Fuel, Settings, Heart, Zap } from "lucide-react";
 
 interface Product {
   id: string;
@@ -55,7 +57,10 @@ export const DynamicProductPage = ({
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showQuickBuy, setShowQuickBuy] = useState(false);
   const { toast } = useToast();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchCategoryAndProducts();
@@ -103,20 +108,43 @@ export const DynamicProductPage = ({
     }
   };
 
-  const handleAddToCart = (productName: string, stockQuantity: number | null) => {
-    if ((stockQuantity || 0) <= 0) {
+  const handleAddToCart = (product: Product) => {
+    if ((product.stock_quantity || 0) <= 0) {
       toast({
         title: "Out of Stock",
-        description: `${productName} is currently out of stock.`,
+        description: `${product.name} is currently out of stock.`,
         variant: "destructive",
       });
       return;
     }
     
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: Array.isArray(product.images) ? product.images[0] : product.images,
+      category: category?.name,
+      productId: product.id
+    });
+    
     toast({
       title: "Added to Cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const handleBuyNow = (product: Product) => {
+    if ((product.stock_quantity || 0) <= 0) {
+      toast({
+        title: "Out of Stock",
+        description: `${product.name} is currently out of stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setSelectedProduct(product);
+    setShowQuickBuy(true);
   };
 
   const handleAddToWishlist = (productName: string) => {
@@ -258,15 +286,25 @@ export const DynamicProductPage = ({
                     </Badge>
                   </div>
 
-                  <Button 
-                    size="sm" 
-                    className="w-full"
-                    onClick={() => handleAddToCart(product.name, product.stock_quantity)}
-                    disabled={(product.stock_quantity || 0) <= 0}
-                  >
-                    <ShoppingCart className="h-3 w-3 mr-1" />
-                    Add to Cart
-                  </Button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => handleAddToCart(product)}
+                      disabled={(product.stock_quantity || 0) <= 0}
+                    >
+                      <ShoppingCart className="h-3 w-3 mr-1" />
+                      Add to Cart
+                    </Button>
+                    <Button 
+                      size="sm"
+                      onClick={() => handleBuyNow(product)}
+                      disabled={(product.stock_quantity || 0) <= 0}
+                    >
+                      <Zap className="h-3 w-3 mr-1" />
+                      Buy Now
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -304,6 +342,22 @@ export const DynamicProductPage = ({
       
       <Footer />
       <AIChatAssistant />
+      
+      {selectedProduct && (
+        <QuickBuyModal
+          isOpen={showQuickBuy}
+          onClose={() => {
+            setShowQuickBuy(false);
+            setSelectedProduct(null);
+          }}
+          product={{
+            id: selectedProduct.id,
+            name: selectedProduct.name,
+            price: selectedProduct.price,
+            image: Array.isArray(selectedProduct.images) ? selectedProduct.images[0] : selectedProduct.images
+          }}
+        />
+      )}
     </div>
   );
 };

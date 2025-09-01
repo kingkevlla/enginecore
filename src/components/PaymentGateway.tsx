@@ -188,7 +188,7 @@ export const PaymentGateway = ({
               ) : (
                 <CreditCard className="h-4 w-4 mr-2" />
               )}
-              Pay with Stripe
+              Pay with Card
             </Button>
           )}
 
