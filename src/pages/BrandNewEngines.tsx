@@ -22,11 +22,14 @@ export default function BrandNewEngines() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="brand-new-engines"
-      title="Brand New Engines"
-      description="Discover our premium collection of brand new automotive engines. Each engine comes with full manufacturer warranty and professional installation support."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="brand-new-engines"
+        title="Brand New Engines"
+        description="Discover our premium collection of brand new automotive engines. Each engine comes with full manufacturer warranty and professional installation support."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }
