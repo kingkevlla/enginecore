@@ -9,34 +9,17 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { PaymentGateway } from "@/components/PaymentGateway";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/useCart";
 
 export const Checkout = () => {
   const { toast } = useToast();
+  const { cartItems, getTotalPrice } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("card");
 
-  // Mock cart items
-  const cartItems = [
-    {
-      id: 1,
-      name: "Toyota 4-Cylinder DOHC Engine",
-      model: "2AZ-FE",
-      price: 3500,
-      quantity: 1,
-      shipping: "Free"
-    },
-    {
-      id: 2,
-      name: "BMW TwinPower V6 Engine",
-      model: "N55B30",
-      price: 8500,
-      quantity: 1,
-      shipping: "$150"
-    }
-  ];
-
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shippingTotal = 150; // Only BMW engine has shipping cost
+  // Use real cart data instead of mock data
+  const subtotal = getTotalPrice();
+  const shippingTotal = 150; // Fixed shipping cost
   const tax = Math.round(subtotal * 0.08); // 8% tax
   const total = subtotal + shippingTotal + tax;
 
@@ -281,10 +264,17 @@ export const Checkout = () => {
                   <div className="space-y-4">
                     {cartItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between p-4 border border-white/10 rounded-lg">
-                        <div>
-                          <h3 className="font-semibold">{item.name}</h3>
-                          <p className="text-sm text-muted-foreground">{item.model}</p>
-                          <p className="text-sm text-green-400">Shipping: {item.shipping}</p>
+                        <div className="flex items-center gap-4">
+                          <img
+                            src={item.image || '/placeholder.svg'}
+                            alt={item.name}
+                            className="w-16 h-16 object-cover rounded-lg"
+                          />
+                          <div>
+                            <h3 className="font-semibold">{item.name}</h3>
+                            <p className="text-sm text-muted-foreground">{item.category}</p>
+                            <p className="text-sm text-green-400">Shipping: $150</p>
+                          </div>
                         </div>
                         <div className="text-right">
                           <p className="font-semibold">${item.price.toLocaleString()}</p>
@@ -354,7 +344,7 @@ export const Checkout = () => {
                       <p className="font-medium text-sm">{item.name}</p>
                       <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">${item.price.toLocaleString()}</p>
+                    <p className="font-semibold">${(item.price * item.quantity).toLocaleString()}</p>
                   </div>
                 ))}
 

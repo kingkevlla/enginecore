@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
 
 interface HeaderProps {
   searchQuery: string;
@@ -28,19 +29,24 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="text-white"
         >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <span className="text-2xl">☰</span>}
+        {isMobileMenuOpen ? <X className="h-6 w-6" /> : <span className="text-2xl">☰</span>}
         </button>
         <div className="text-center">
           <span className="text-orange-400 text-lg font-bold">APR AUTO</span>
           <p className="text-xs text-gray-400">JOIN THE FUN !!</p>
         </div>
+        <ShoppingCartSidebar />
       </div>
 
       {/* Desktop Logo */}
-      <div className="hidden md:block bg-black py-6 text-center">
-        <div className="text-center">
-          <span className="text-orange-400 text-2xl font-bold">APR AUTO</span>
-          <p className="text-sm text-gray-400 mt-1">JOIN THE FUN !!</p>
+      <div className="hidden md:block bg-black py-6">
+        <div className="flex justify-between items-center max-w-4xl mx-auto px-4">
+          <div></div>
+          <div className="text-center">
+            <span className="text-orange-400 text-2xl font-bold">APR AUTO</span>
+            <p className="text-sm text-gray-400 mt-1">JOIN THE FUN !!</p>
+          </div>
+          <ShoppingCartSidebar />
         </div>
       </div>
 

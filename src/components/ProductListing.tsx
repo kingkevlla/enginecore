@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Search, Filter, Grid, List, Heart, ShoppingCart, Star, Zap, Fuel, Settings } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +11,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
+import { ProductDetailsModal } from "@/components/ProductDetailsModal";
+import { QuickBuyModal } from "@/components/QuickBuyModal";
 
 // Default image fallback
 const defaultImage = "/placeholder.svg";
@@ -31,11 +34,13 @@ interface Product {
   is_active: boolean | null;
   is_featured: boolean | null;
   images: any;
+  specifications: any;
   created_at: string;
 }
 
 export const ProductListing = () => {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,6 +52,8 @@ export const ProductListing = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showQuickBuy, setShowQuickBuy] = useState(false);
 
   // Load products from Supabase
   const loadProducts = async () => {
@@ -106,19 +113,33 @@ export const ProductListing = () => {
     return matchesSearch && matchesBrand && matchesPrice;
   });
 
-  const handleAddToCart = (productName: string, stockQuantity: number | null) => {
-    if ((stockQuantity || 0) <= 0) {
+  const handleAddToCart = (product: Product) => {
+    if ((product.stock_quantity || 0) <= 0) {
       toast({
         title: "Out of Stock",
-        description: `${productName} is currently out of stock.`,
+        description: `${product.name} is currently out of stock.`,
         variant: "destructive",
       });
       return;
     }
+
+    // Get the first image URL if available
+    const imageUrl = Array.isArray(product.images) && product.images.length > 0 
+      ? product.images[0]?.url || product.images[0] 
+      : defaultImage;
+    
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: imageUrl,
+      category: product.brand || 'Engine Part',
+      productId: product.id
+    });
     
     toast({
       title: "Added to Cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
@@ -137,6 +158,11 @@ export const ProductListing = () => {
       default: return 0;
     }
   });
+
+  const handleQuickBuy = (product: Product) => {
+    setSelectedProduct(product);
+    setShowQuickBuy(true);
+  };
 
   if (loading) {
     return (
@@ -257,11 +283,20 @@ export const ProductListing = () => {
                 <Button 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => handleAddToCart(product.name, product.stock_quantity || 0)}
+                  onClick={() => handleAddToCart(product)}
                   disabled={(product.stock_quantity || 0) <= 0}
                 >
                   <ShoppingCart className="h-3 w-3 mr-1" />
                   Add to Cart
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="default"
+                  className="flex-1"
+                  onClick={() => handleQuickBuy(product)}
+                  disabled={(product.stock_quantity || 0) <= 0}
+                >
+                  Buy Now
                 </Button>
                 <Button 
                   size="sm" 
@@ -282,6 +317,23 @@ export const ProductListing = () => {
             </p>
           </div>
         )}
+
+        {/* Product Details Modal */}
+        <ProductDetailsModal
+          product={selectedProduct ? {
+            ...selectedProduct,
+            specifications: selectedProduct.specifications || {}
+          } : null}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+
+        {/* Quick Buy Modal */}
+        <QuickBuyModal
+          product={selectedProduct}
+          isOpen={showQuickBuy}
+          onClose={() => setShowQuickBuy(false)}
+        />
       </div>
     </section>
   );
