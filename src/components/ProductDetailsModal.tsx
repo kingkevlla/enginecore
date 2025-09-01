@@ -6,6 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Json } from "@/integrations/supabase/types";
 import { ShoppingCart, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PaymentGateway } from "./PaymentGateway";
 
 interface Product {
   id: string;
@@ -28,6 +29,7 @@ interface ProductDetailsModalProps {
 
 export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetailsModalProps) => {
   const { toast } = useToast();
+  const [showPayment, setShowPayment] = useState(false);
 
   if (!product) return null;
 
@@ -49,6 +51,35 @@ export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetails
     toast({
       title: "Added to Wishlist",
       description: `${product.name} has been added to your wishlist.`,
+    });
+  };
+
+  const handleBuyNow = () => {
+    if (product && (product.stock_quantity || 0) > 0) {
+      setShowPayment(true);
+    } else {
+      toast({
+        title: "Out of Stock",
+        description: `${product?.name} is currently out of stock.`,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handlePaymentSuccess = (paymentId: string) => {
+    toast({
+      title: "Payment Successful!",
+      description: `Your order has been processed. Payment ID: ${paymentId}`,
+    });
+    setShowPayment(false);
+    onClose();
+  };
+
+  const handlePaymentError = (error: string) => {
+    toast({
+      title: "Payment Failed",
+      description: error,
+      variant: "destructive",
     });
   };
 
@@ -154,7 +185,16 @@ export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetails
             {/* Action Buttons */}
             <div className="flex gap-4 pt-4">
               <Button 
+                onClick={handleBuyNow}
+                className="flex-1"
+                disabled={product.stock_quantity === 0}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Buy Now
+              </Button>
+              <Button 
                 onClick={handleAddToCart}
+                variant="outline"
                 className="flex-1"
                 disabled={product.stock_quantity === 0}
               >
@@ -164,12 +204,31 @@ export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetails
               <Button
                 variant="outline"
                 onClick={handleAddToWishlist}
-                className="flex-1"
+                className="px-4"
               >
-                <Heart className="w-4 h-4 mr-2" />
-                Add to Wishlist
+                <Heart className="w-4 h-4" />
               </Button>
             </div>
+
+            {/* Payment Gateway */}
+            {showPayment && (
+              <div className="mt-6 pt-6 border-t">
+                <h3 className="text-lg font-semibold mb-4">Complete Your Purchase</h3>
+                <PaymentGateway
+                  amount={product.price}
+                  description={product.name}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                />
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowPayment(false)}
+                  className="w-full mt-4"
+                >
+                  Cancel Payment
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>

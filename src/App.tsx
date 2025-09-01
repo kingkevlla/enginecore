@@ -32,6 +32,8 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminSettings from "./pages/AdminSettings";
 import AdminCategories from "./pages/AdminCategories";
 import AdminCustomers from "./pages/AdminCustomers";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancelled from "./pages/PaymentCancelled";
 
 const queryClient = new QueryClient();
 
@@ -71,6 +73,9 @@ const App = () => (
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/customers" element={<AdminCustomers />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
+          {/* Payment Routes */}
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancelled" element={<PaymentCancelled />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

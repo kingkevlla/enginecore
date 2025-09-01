@@ -49,6 +49,26 @@ export default function AdminSettings() {
     smtp_password: '',
   });
 
+  const [paymentSettings, setPaymentSettings] = useState({
+    stripe_enabled: false,
+    stripe_publishable_key: '',
+    stripe_secret_key: '',
+    paypal_enabled: false,
+    paypal_client_id: '',
+    paypal_client_secret: '',
+    paypal_mode: 'sandbox', // sandbox or live
+    square_enabled: false,
+    square_application_id: '',
+    square_access_token: '',
+    square_location_id: '',
+    razorpay_enabled: false,
+    razorpay_key_id: '',
+    razorpay_key_secret: '',
+    apple_pay_enabled: false,
+    google_pay_enabled: false,
+    test_mode: true,
+  });
+
   useEffect(() => {
     checkAdminAccess();
     loadSettings();
@@ -99,6 +119,9 @@ export default function AdminSettings() {
         }
         if (settings.email_settings) {
           setEmailSettings({ ...emailSettings, ...settings.email_settings });
+        }
+        if (settings.payment_settings) {
+          setPaymentSettings({ ...paymentSettings, ...settings.payment_settings });
         }
       }
     } catch (error) {
@@ -169,10 +192,11 @@ export default function AdminSettings() {
 
           <div className="p-6">
             <Tabs defaultValue="general" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="general">General</TabsTrigger>
                 <TabsTrigger value="business">Business</TabsTrigger>
                 <TabsTrigger value="email">Email</TabsTrigger>
+                <TabsTrigger value="payment">Payment</TabsTrigger>
               </TabsList>
 
               <TabsContent value="general">
@@ -477,6 +501,275 @@ export default function AdminSettings() {
                     </Button>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="payment">
+                <div className="space-y-6">
+                  {/* Test Mode Toggle */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Payment Configuration</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="test_mode"
+                          checked={paymentSettings.test_mode}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            test_mode: checked
+                          })}
+                        />
+                        <Label htmlFor="test_mode">Test Mode (Use sandbox/test credentials)</Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* Stripe Configuration */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Stripe Payment Gateway</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="stripe_enabled"
+                          checked={paymentSettings.stripe_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            stripe_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="stripe_enabled">Enable Stripe Payments</Label>
+                      </div>
+
+                      {paymentSettings.stripe_enabled && (
+                        <div className="grid grid-cols-1 gap-4 mt-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="stripe_publishable_key">Stripe Publishable Key</Label>
+                            <Input
+                              id="stripe_publishable_key"
+                              placeholder={paymentSettings.test_mode ? "pk_test_..." : "pk_live_..."}
+                              value={paymentSettings.stripe_publishable_key}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                stripe_publishable_key: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="stripe_secret_key">Stripe Secret Key</Label>
+                            <Input
+                              id="stripe_secret_key"
+                              type="password"
+                              placeholder={paymentSettings.test_mode ? "sk_test_..." : "sk_live_..."}
+                              value={paymentSettings.stripe_secret_key}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                stripe_secret_key: e.target.value
+                              })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* PayPal Configuration */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>PayPal Payment Gateway</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="paypal_enabled"
+                          checked={paymentSettings.paypal_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            paypal_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="paypal_enabled">Enable PayPal Payments</Label>
+                      </div>
+
+                      {paymentSettings.paypal_enabled && (
+                        <div className="grid grid-cols-1 gap-4 mt-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="paypal_client_id">PayPal Client ID</Label>
+                            <Input
+                              id="paypal_client_id"
+                              value={paymentSettings.paypal_client_id}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                paypal_client_id: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="paypal_client_secret">PayPal Client Secret</Label>
+                            <Input
+                              id="paypal_client_secret"
+                              type="password"
+                              value={paymentSettings.paypal_client_secret}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                paypal_client_secret: e.target.value
+                              })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Square Configuration */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Square Payment Gateway</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="square_enabled"
+                          checked={paymentSettings.square_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            square_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="square_enabled">Enable Square Payments</Label>
+                      </div>
+
+                      {paymentSettings.square_enabled && (
+                        <div className="grid grid-cols-1 gap-4 mt-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="square_application_id">Square Application ID</Label>
+                            <Input
+                              id="square_application_id"
+                              value={paymentSettings.square_application_id}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                square_application_id: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="square_access_token">Square Access Token</Label>
+                            <Input
+                              id="square_access_token"
+                              type="password"
+                              value={paymentSettings.square_access_token}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                square_access_token: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="square_location_id">Square Location ID</Label>
+                            <Input
+                              id="square_location_id"
+                              value={paymentSettings.square_location_id}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                square_location_id: e.target.value
+                              })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Razorpay Configuration */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Razorpay Payment Gateway</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="razorpay_enabled"
+                          checked={paymentSettings.razorpay_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            razorpay_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="razorpay_enabled">Enable Razorpay Payments</Label>
+                      </div>
+
+                      {paymentSettings.razorpay_enabled && (
+                        <div className="grid grid-cols-1 gap-4 mt-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="razorpay_key_id">Razorpay Key ID</Label>
+                            <Input
+                              id="razorpay_key_id"
+                              value={paymentSettings.razorpay_key_id}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                razorpay_key_id: e.target.value
+                              })}
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="razorpay_key_secret">Razorpay Key Secret</Label>
+                            <Input
+                              id="razorpay_key_secret"
+                              type="password"
+                              value={paymentSettings.razorpay_key_secret}
+                              onChange={(e) => setPaymentSettings({
+                                ...paymentSettings,
+                                razorpay_key_secret: e.target.value
+                              })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  {/* Digital Wallets */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Digital Wallets</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="apple_pay_enabled"
+                          checked={paymentSettings.apple_pay_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            apple_pay_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="apple_pay_enabled">Enable Apple Pay</Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <Switch
+                          id="google_pay_enabled"
+                          checked={paymentSettings.google_pay_enabled}
+                          onCheckedChange={(checked) => setPaymentSettings({
+                            ...paymentSettings,
+                            google_pay_enabled: checked
+                          })}
+                        />
+                        <Label htmlFor="google_pay_enabled">Enable Google Pay</Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Button 
+                    onClick={() => saveSettings('payment_settings', paymentSettings)}
+                    disabled={saving}
+                    className="w-full"
+                  >
+                    {saving ? 'Saving...' : 'Save Payment Settings'}
+                  </Button>
+                </div>
               </TabsContent>
             </Tabs>
           </div>
