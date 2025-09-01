@@ -7,8 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { PaymentGateway } from "@/components/PaymentGateway";
+import { useToast } from "@/hooks/use-toast";
 
 export const Checkout = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("card");
 
@@ -264,13 +267,13 @@ export const Checkout = () => {
               </Card>
             )}
 
-            {/* Step 3: Order Review */}
+            {/* Step 3: Order Review & Payment */}
             {currentStep === 3 && (
               <Card className="glass-card border-white/10">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 font-['Orbitron']">
                     <Check className="h-5 w-5" />
-                    Review Your Order
+                    Review & Complete Payment
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -298,6 +301,32 @@ export const Checkout = () => {
                     </div>
                   </div>
 
+                  <Separator />
+
+                  {/* Payment Gateway Integration */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Complete Your Payment</h3>
+                    <PaymentGateway
+                      amount={total}
+                      description={`Order for ${cartItems.length} item(s)`}
+                      onSuccess={(paymentId) => {
+                        toast({
+                          title: "Payment Successful!",
+                          description: `Your order has been placed. Payment ID: ${paymentId}`,
+                        });
+                        // Navigate to success page
+                        window.location.href = `/payment-success?payment_id=${paymentId}`;
+                      }}
+                      onError={(error) => {
+                        toast({
+                          title: "Payment Failed",
+                          description: error,
+                          variant: "destructive",
+                        });
+                      }}
+                    />
+                  </div>
+
                   <div className="flex gap-4">
                     <Button 
                       onClick={() => setCurrentStep(2)} 
@@ -305,12 +334,6 @@ export const Checkout = () => {
                       className="flex-1"
                     >
                       Back to Payment
-                    </Button>
-                    <Button 
-                      className="flex-1" 
-                      variant="futuristic"
-                    >
-                      Place Order
                     </Button>
                   </div>
                 </CardContent>

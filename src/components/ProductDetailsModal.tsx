@@ -7,6 +7,7 @@ import { Json } from "@/integrations/supabase/types";
 import { ShoppingCart, Heart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { PaymentGateway } from "./PaymentGateway";
+import { useCart } from "@/hooks/useCart";
 
 interface Product {
   id: string;
@@ -29,6 +30,7 @@ interface ProductDetailsModalProps {
 
 export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetailsModalProps) => {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const [showPayment, setShowPayment] = useState(false);
 
   if (!product) return null;
@@ -41,10 +43,21 @@ export const ProductDetailsModal = ({ product, isOpen, onClose }: ProductDetails
   };
 
   const handleAddToCart = () => {
-    toast({
-      title: "Added to Cart",
-      description: `${product.name} has been added to your cart.`,
-    });
+    if (product) {
+      addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: getImageUrls(product.images)[0],
+        category: product.brand || 'Engine Part',
+        productId: product.id
+      });
+      
+      toast({
+        title: "Added to Cart",
+        description: `${product.name} has been added to your cart.`,
+      });
+    }
   };
 
   const handleAddToWishlist = () => {

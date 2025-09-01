@@ -1,46 +1,18 @@
-import { useState } from "react";
-import { ShoppingCart, Plus, Minus, Trash2, X } from "lucide-react";
+import { ShoppingCart, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  category: string;
-}
+import { useCart } from "@/hooks/useCart";
 
 export const ShoppingCartSidebar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "BMW B58 3.0L Turbo Engine",
-      price: 8500,
-      quantity: 1,
-      image: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=100&h=100&fit=crop",
-      category: "Car Engine"
-    }
-  ]);
+  const { cartItems, updateQuantity, removeFromCart, getTotalItems, getTotalPrice } = useCart();
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      setCartItems(cartItems.filter(item => item.id !== id));
-    } else {
-      setCartItems(cartItems.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      ));
-    }
-  };
-
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     const item = cartItems.find(item => item.id === id);
-    setCartItems(cartItems.filter(item => item.id !== id));
+    removeFromCart(id);
     
     if (item) {
       toast({
@@ -63,7 +35,7 @@ export const ShoppingCartSidebar = () => {
     navigate('/checkout');
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = getTotalPrice();
   const shipping = 150; // $150 shipping
   const total = subtotal + shipping;
 
@@ -72,9 +44,9 @@ export const ShoppingCartSidebar = () => {
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <ShoppingCart className="h-5 w-5" />
-          {cartItems.length > 0 && (
+          {getTotalItems() > 0 && (
             <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+              {getTotalItems()}
             </span>
           )}
         </Button>
@@ -99,13 +71,13 @@ export const ShoppingCartSidebar = () => {
                 <div key={item.id} className="glass-card p-4 rounded-lg">
                   <div className="flex gap-4">
                     <img
-                      src={item.image}
+                      src={item.image || '/placeholder.svg'}
                       alt={item.name}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div className="flex-1">
                       <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
-                      <p className="text-xs text-muted-foreground mb-2">{item.category}</p>
+                      <p className="text-xs text-muted-foreground mb-2">{item.category || 'Engine Part'}</p>
                       <p className="text-primary font-bold">${item.price.toLocaleString()}</p>
                     </div>
                     <Button
