@@ -32,7 +32,15 @@ export const ShoppingCartSidebar = () => {
       return;
     }
     
-    navigate('/checkout');
+    // Close the cart sidebar and navigate to checkout
+    const sheetTrigger = document.querySelector('[data-state="open"]');
+    if (sheetTrigger) {
+      (sheetTrigger as HTMLElement).click();
+    }
+    
+    setTimeout(() => {
+      navigate('/checkout');
+    }, 300);
   };
 
   const subtotal = getTotalPrice();

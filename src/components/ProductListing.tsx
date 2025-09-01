@@ -292,7 +292,7 @@ export const ProductListing = () => {
                 <Button 
                   size="sm" 
                   variant="default"
-                  className="flex-1"
+                  className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
                   onClick={() => handleQuickBuy(product)}
                   disabled={(product.stock_quantity || 0) <= 0}
                 >

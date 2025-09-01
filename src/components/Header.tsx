@@ -92,6 +92,9 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
           <Link to="/register" className="menu-item block py-2">
             REGISTER
           </Link>
+          <Link to="/cart" className="menu-item block py-2">
+            CART
+          </Link>
         </div>
       </nav>
 
@@ -125,6 +128,9 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             </Link>
             <Link to="/register" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
               REGISTER
+            </Link>
+            <Link to="/cart" className="menu-item block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+              CART
             </Link>
           </div>
         </nav>

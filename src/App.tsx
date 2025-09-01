@@ -34,6 +34,7 @@ import AdminCategories from "./pages/AdminCategories";
 import AdminCustomers from "./pages/AdminCustomers";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
+import CartPage from "./pages/CartPage";
 
 const queryClient = new QueryClient();
 
@@ -53,7 +54,8 @@ const App = () => (
           <Route path="/timing-components" element={<TimingComponents />} />
           <Route path="/parts" element={<Parts />} />
           <Route path="/used-engines" element={<UsedEngines />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<Login />} />

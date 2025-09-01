@@ -47,6 +47,16 @@ export const PaymentGateway = ({
   const processStripePayment = async () => {
     setLoading(true);
     try {
+      // Get the auth header for the current user
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const { data, error } = await supabase.functions.invoke('create-stripe-payment', {
         body: {
           amount: Math.round(amount * 100), // Convert to cents
@@ -67,6 +77,7 @@ export const PaymentGateway = ({
         onSuccess?.(data.session_id);
       }
     } catch (error: any) {
+      console.error('Stripe payment error:', error);
       const errorMessage = error.message || 'Payment failed';
       toast({
         title: "Payment Error",
@@ -82,6 +93,9 @@ export const PaymentGateway = ({
   const processPayPalPayment = async () => {
     setLoading(true);
     try {
+      // Get the auth header for the current user
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase.functions.invoke('create-paypal-payment', {
         body: {
           amount,
@@ -102,6 +116,7 @@ export const PaymentGateway = ({
         onSuccess?.(data.payment_id);
       }
     } catch (error: any) {
+      console.error('PayPal payment error:', error);
       const errorMessage = error.message || 'PayPal payment failed';
       toast({
         title: "Payment Error",
