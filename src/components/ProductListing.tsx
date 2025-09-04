@@ -320,10 +320,7 @@ export const ProductListing = () => {
 
         {/* Product Details Modal */}
         <ProductDetailsModal
-          product={selectedProduct ? {
-            ...selectedProduct,
-            specifications: selectedProduct.specifications || {}
-          } : null}
+          product={selectedProduct}
           isOpen={!!selectedProduct}
           onClose={() => setSelectedProduct(null)}
         />

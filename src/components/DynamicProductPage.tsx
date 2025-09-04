@@ -8,8 +8,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AIChatAssistant } from "@/components/AIChatAssistant";
 import { QuickBuyModal } from "@/components/QuickBuyModal";
+import { ProductDetailsModal } from "@/components/ProductDetailsModal";
 import { useCart } from "@/hooks/useCart";
-import { Star, ShoppingCart, Calendar, Gauge, Fuel, Settings, Heart, Zap } from "lucide-react";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Star, ShoppingCart, Calendar, Gauge, Fuel, Settings, Heart, Zap, Eye } from "lucide-react";
 
 interface Product {
   id: string;
@@ -59,6 +61,7 @@ export const DynamicProductPage = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showQuickBuy, setShowQuickBuy] = useState(false);
+  const [showProductDetails, setShowProductDetails] = useState(false);
   const { toast } = useToast();
   const { addToCart } = useCart();
 
@@ -147,6 +150,11 @@ export const DynamicProductPage = ({
     setShowQuickBuy(true);
   };
 
+  const handleViewDetails = (product: Product) => {
+    setSelectedProduct(product);
+    setShowProductDetails(true);
+  };
+
   const handleAddToWishlist = (productName: string) => {
     toast({
       title: "Added to Wishlist",
@@ -210,104 +218,164 @@ export const DynamicProductPage = ({
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <Card key={product.id} className="group glass-card border-white/10 overflow-hidden hover-glow">
-                <div className="relative overflow-hidden">
-                  <img
-                    src={(Array.isArray(product.images) ? product.images[0] : product.images) || "/placeholder.svg"}
-                    alt={product.name}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.currentTarget.src = "/placeholder.svg";
-                    }}
-                  />
-                  <div className="absolute top-3 left-3 flex gap-2">
-                    <Badge variant="secondary" className="bg-accent/90 text-accent-foreground">
-                      {product.brand}
-                    </Badge>
-                    <Badge variant={product.condition === "new" ? "default" : 
-                                  product.condition === "refurbished" ? "secondary" : "outline"}>
-                      {product.condition}
-                    </Badge>
-                  </div>
-                  <div className="absolute top-3 right-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 w-8 p-0 bg-background/80"
-                      onClick={() => handleAddToWishlist(product.name)}
-                    >
-                      <Heart className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <CardContent className="p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Badge variant="outline" className="text-xs">
-                      {product.model}
-                    </Badge>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span className="text-xs">4.8</span>
-                      <span className="text-xs text-muted-foreground">(156)</span>
-                    </div>
-                  </div>
-
-                  <h3 className="font-bold text-sm mb-1 line-clamp-2">{product.name}</h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">
-                    {product.short_description || product.description}
-                  </p>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="flex items-center gap-1">
-                      <Gauge className="h-3 w-3 text-primary" />
-                      <span>{product.engine_type}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Fuel className="h-3 w-3 text-muted-foreground" />
-                      <span>{product.displacement}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-lg font-bold text-primary">
-                        ${product.price.toLocaleString()}
-                      </div>
-                      {product.compare_price && (
-                        <div className="text-xs text-muted-foreground line-through">
-                          ${product.compare_price.toLocaleString()}
+            {filteredProducts.map((product) => {
+              const productImages = Array.isArray(product.images) ? product.images : [product.images];
+              
+              return (
+                <Card key={product.id} className="group glass-card border-white/10 overflow-hidden hover-glow hover-scale">
+                  <div className="relative">
+                    {/* Image Carousel */}
+                    <div className="relative h-48 overflow-hidden bg-muted">
+                      {productImages.length > 1 ? (
+                        <Carousel className="w-full h-full">
+                          <CarouselContent>
+                            {productImages.map((image, index) => (
+                              <CarouselItem key={index}>
+                                <div 
+                                  className="relative h-48 cursor-pointer"
+                                  onClick={() => handleViewDetails(product)}
+                                >
+                                  <img
+                                    src={image || "/placeholder.svg"}
+                                    alt={`${product.name} - Image ${index + 1}`}
+                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                    onError={(e) => {
+                                      e.currentTarget.src = "/placeholder.svg";
+                                    }}
+                                  />
+                                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                                    <Eye className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                  </div>
+                                </div>
+                              </CarouselItem>
+                            ))}
+                          </CarouselContent>
+                          {productImages.length > 1 && (
+                            <>
+                              <CarouselPrevious className="left-2" />
+                              <CarouselNext className="right-2" />
+                            </>
+                          )}
+                        </Carousel>
+                      ) : (
+                        <div 
+                          className="relative h-48 cursor-pointer"
+                          onClick={() => handleViewDetails(product)}
+                        >
+                          <img
+                            src={productImages[0] || "/placeholder.svg"}
+                            alt={product.name}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            onError={(e) => {
+                              e.currentTarget.src = "/placeholder.svg";
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center">
+                            <Eye className="h-6 w-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          </div>
                         </div>
                       )}
                     </div>
-                    <Badge variant={(product.stock_quantity || 0) > 0 ? "default" : "destructive"} className="text-xs">
-                      {(product.stock_quantity || 0) > 0 ? `${product.stock_quantity} in stock` : "Out of stock"}
-                    </Badge>
+                    
+                    <div className="absolute top-3 left-3 flex gap-2">
+                      <Badge variant="secondary" className="bg-accent/90 text-accent-foreground">
+                        {product.brand}
+                      </Badge>
+                      <Badge variant={product.condition === "new" ? "default" : 
+                                    product.condition === "refurbished" ? "secondary" : "outline"}>
+                        {product.condition}
+                      </Badge>
+                    </div>
+                    <div className="absolute top-3 right-3">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 w-8 p-0 bg-background/80"
+                        onClick={() => handleAddToWishlist(product.name)}
+                      >
+                        <Heart className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => handleAddToCart(product)}
-                      disabled={(product.stock_quantity || 0) <= 0}
-                    >
-                      <ShoppingCart className="h-3 w-3 mr-1" />
-                      Add to Cart
-                    </Button>
-                    <Button 
-                      size="sm"
-                      onClick={() => handleBuyNow(product)}
-                      disabled={(product.stock_quantity || 0) <= 0}
-                    >
-                      <Zap className="h-3 w-3 mr-1" />
-                      Buy Now
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardContent className="p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-xs">
+                        {product.model}
+                      </Badge>
+                      <div className="flex items-center gap-1">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        <span className="text-xs">4.8</span>
+                        <span className="text-xs text-muted-foreground">(156)</span>
+                      </div>
+                    </div>
+
+                    <h3 className="font-bold text-sm mb-1 line-clamp-2">{product.name}</h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {product.short_description || product.description}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="flex items-center gap-1">
+                        <Gauge className="h-3 w-3 text-primary" />
+                        <span>{product.engine_type}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Fuel className="h-3 w-3 text-muted-foreground" />
+                        <span>{product.displacement}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-lg font-bold text-primary">
+                          ${product.price.toLocaleString()}
+                        </div>
+                        {product.compare_price && (
+                          <div className="text-xs text-muted-foreground line-through">
+                            ${product.compare_price.toLocaleString()}
+                          </div>
+                        )}
+                      </div>
+                      <Badge variant={(product.stock_quantity || 0) > 0 ? "default" : "destructive"} className="text-xs">
+                        {(product.stock_quantity || 0) > 0 ? `${product.stock_quantity} in stock` : "Out of stock"}
+                      </Badge>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => handleViewDetails(product)}
+                        className="text-xs"
+                      >
+                        <Eye className="h-3 w-3 mr-1" />
+                        View
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => handleAddToCart(product)}
+                        disabled={(product.stock_quantity || 0) <= 0}
+                        className="text-xs"
+                      >
+                        <ShoppingCart className="h-3 w-3 mr-1" />
+                        Cart
+                      </Button>
+                      <Button 
+                        size="sm"
+                        onClick={() => handleBuyNow(product)}
+                        disabled={(product.stock_quantity || 0) <= 0}
+                        className="text-xs"
+                      >
+                        <Zap className="h-3 w-3 mr-1" />
+                        Buy
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {filteredProducts.length === 0 && (
@@ -343,7 +411,8 @@ export const DynamicProductPage = ({
       <Footer />
       <AIChatAssistant />
       
-      {selectedProduct && (
+      {/* Quick Buy Modal */}
+      {selectedProduct && showQuickBuy && (
         <QuickBuyModal
           isOpen={showQuickBuy}
           onClose={() => {
@@ -356,6 +425,18 @@ export const DynamicProductPage = ({
             price: selectedProduct.price,
             image: Array.isArray(selectedProduct.images) ? selectedProduct.images[0] : selectedProduct.images
           }}
+        />
+      )}
+
+      {/* Product Details Modal */}
+      {selectedProduct && showProductDetails && (
+        <ProductDetailsModal
+          isOpen={showProductDetails}
+          onClose={() => {
+            setShowProductDetails(false);
+            setSelectedProduct(null);
+          }}
+          product={selectedProduct}
         />
       )}
     </div>
