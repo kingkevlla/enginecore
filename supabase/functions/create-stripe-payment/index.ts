@@ -20,19 +20,8 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    // Get payment settings from database
-    const { data: settingsData, error: settingsError } = await supabaseClient
-      .from('website_settings')
-      .select('value')
-      .eq('key', 'payment_settings')
-      .single();
-
-    if (settingsError || !settingsData?.value?.stripe_enabled) {
-      throw new Error("Stripe payments are not enabled");
-    }
-
-    const paymentSettings = settingsData.value;
-    const stripeSecretKey = paymentSettings.stripe_secret_key;
+    // Get Stripe secret key from environment variables
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
 
     if (!stripeSecretKey) {
       throw new Error("Stripe secret key not configured");

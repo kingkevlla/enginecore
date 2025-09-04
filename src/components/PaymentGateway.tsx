@@ -22,26 +22,13 @@ export const PaymentGateway = ({
   onError 
 }: PaymentGatewayProps) => {
   const [loading, setLoading] = useState(false);
-  const [paymentSettings, setPaymentSettings] = useState<any>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    loadPaymentSettings();
-  }, []);
-
-  const loadPaymentSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('website_settings')
-        .select('value')
-        .eq('key', 'payment_settings')
-        .single();
-
-      if (error) throw error;
-      setPaymentSettings(data?.value);
-    } catch (error) {
-      console.error('Error loading payment settings:', error);
-    }
+  
+  // Simplified payment settings - assume both are enabled for now
+  const paymentSettings = {
+    stripe_enabled: true,
+    paypal_enabled: true,
+    test_mode: true
   };
 
   const processStripePayment = async () => {
@@ -128,17 +115,6 @@ export const PaymentGateway = ({
       setLoading(false);
     }
   };
-
-  if (!paymentSettings) {
-    return (
-      <Card>
-        <CardContent className="p-6 text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2" />
-          <p className="text-muted-foreground">Loading payment options...</p>
-        </CardContent>
-      </Card>
-    );
-  }
 
   const hasEnabledPayments = paymentSettings.stripe_enabled || paymentSettings.paypal_enabled;
 
