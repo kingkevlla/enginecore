@@ -22,11 +22,14 @@ export default function RebuiltEngines() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="rebuilt-engines"
-      title="Rebuilt Engines"
-      description="Professional rebuilt engines with comprehensive warranty. Each engine undergoes rigorous testing and quality control procedures."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="rebuilt-engines"
+        title="Rebuilt Engines"
+        description="Professional rebuilt engines with comprehensive warranty. Each engine undergoes rigorous testing and quality control procedures."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }

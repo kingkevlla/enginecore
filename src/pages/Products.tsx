@@ -1,22 +1,35 @@
-import { useState } from "react";
-import { Header } from "@/components/Header";
-import { ProductListing } from "@/components/ProductListing";
-import { Footer } from "@/components/Footer";
-import { AIChatAssistant } from "@/components/AIChatAssistant";
+import { DynamicProductPage } from "@/components/DynamicProductPage";
+import { ImageCardsSection } from "@/components/ImageCardsSection";
+import { Settings, Star, Calendar } from "lucide-react";
 
-const Products = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+export default function Products() {
+  const features = [
+    {
+      icon: Settings,
+      title: "Professional Quality",
+      description: "All products meet or exceed OEM specifications and quality standards."
+    },
+    {
+      icon: Star,
+      title: "Wide Selection",
+      description: "Comprehensive inventory of engines, parts, and accessories for all vehicle types."
+    },
+    {
+      icon: Calendar,
+      title: "Expert Support",
+      description: "Professional installation guidance and comprehensive technical support."
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
-      <main>
-        <ProductListing />
-      </main>
-      <Footer />
-      <AIChatAssistant />
-    </div>
+    <>
+      <DynamicProductPage
+        categorySlug="all-products"
+        title="All Products"
+        description="Browse our complete selection of automotive engines, parts, and accessories. From brand new to rebuilt engines, we have everything you need for your vehicle."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
-};
-
-export default Products;
+}

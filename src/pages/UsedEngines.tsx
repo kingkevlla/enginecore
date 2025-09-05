@@ -22,11 +22,14 @@ export default function UsedEngines() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="used-engines"
-      title="Used Engines (2000-2020)"
-      description="Quality pre-owned engines at affordable prices. Each engine is thoroughly inspected and comes with detailed history and warranty coverage."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="used-engines"
+        title="Used Engines (2000-2020)"
+        description="Quality pre-owned engines at affordable prices. Each engine is thoroughly inspected and comes with detailed history and warranty coverage."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }

@@ -22,11 +22,14 @@ export default function TimingComponents() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="timing-components"
-      title="Timing Components"
-      description="Precision timing belts, chains, and components for optimal engine performance. Essential parts for maintaining proper engine timing and reliability."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="timing-components"
+        title="Timing Components"
+        description="Precision timing belts, chains, and components for optimal engine performance. Essential parts for maintaining proper engine timing and reliability."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }

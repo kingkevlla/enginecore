@@ -22,11 +22,14 @@ export default function Parts() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="parts"
-      title="Engine Parts & Accessories"
-      description="Complete selection of automotive engine parts and accessories. From filters to gaskets, we have everything you need for engine maintenance and repair."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="parts"
+        title="Engine Parts & Accessories"
+        description="Complete selection of automotive engine parts and accessories. From filters to gaskets, we have everything you need for engine maintenance and repair."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }

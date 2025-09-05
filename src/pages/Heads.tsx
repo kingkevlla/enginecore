@@ -22,11 +22,14 @@ export default function Heads() {
   ];
 
   return (
-    <DynamicProductPage
-      categorySlug="heads"
-      title="Cylinder Heads"
-      description="High-quality cylinder heads and head components for optimal engine performance. Professional rebuilding and reconditioning services available."
-      features={features}
-    />
+    <>
+      <DynamicProductPage
+        categorySlug="heads"
+        title="Cylinder Heads"
+        description="High-quality cylinder heads and head components for optimal engine performance. Professional rebuilding and reconditioning services available."
+        features={features}
+      />
+      <ImageCardsSection />
+    </>
   );
 }
