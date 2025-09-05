@@ -82,4 +82,54 @@
   .menu-item {
     @apply text-white hover:text-gray-300 transition-colors duration-200 text-lg font-medium tracking-wide;
   }
+
+  /* Button utilities */
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+
+  .tech-border {
+    @apply border border-accent/30;
+  }
+
+  .secondary-bright {
+    @apply bg-secondary/80;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 5px hsl(var(--accent));
+    }
+    to {
+      box-shadow: 0 0 20px hsl(var(--accent)), 0 0 30px hsl(var(--accent));
+    }
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent;
+  }
+
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+
+  .hover-scale {
+    transition: transform 0.3s ease;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
 }

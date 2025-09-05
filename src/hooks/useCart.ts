@@ -34,16 +34,20 @@ export const useCart = () => {
 
   const addToCart = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
     const quantity = item.quantity || 1;
+    console.log('Adding to cart:', item, 'quantity:', quantity);
+    
     setCartItems(prevItems => {
       const existingItem = prevItems.find(cartItem => cartItem.id === item.id);
       
       if (existingItem) {
+        console.log('Item exists, updating quantity');
         return prevItems.map(cartItem =>
           cartItem.id === item.id
             ? { ...cartItem, quantity: cartItem.quantity + quantity }
             : cartItem
         );
       } else {
+        console.log('New item, adding to cart');
         return [...prevItems, { ...item, quantity }];
       }
     });
@@ -70,11 +74,15 @@ export const useCart = () => {
   };
 
   const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    const total = cartItems.reduce((total, item) => total + item.quantity, 0);
+    console.log('Total items in cart:', total, 'Cart items:', cartItems);
+    return total;
   };
 
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const total = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    console.log('Total price in cart:', total);
+    return total;
   };
 
   return {
