@@ -71,26 +71,53 @@ export const DynamicProductPage = ({
 
   const fetchCategoryAndProducts = async () => {
     try {
-      // First fetch the category by slug
-      const { data: categoryData, error: categoryError } = await supabase
-        .from('categories')
-        .select('*')
-        .eq('slug', categorySlug)
-        .eq('is_active', true)
-        .single();
+      let productsData;
+      let categoryData = null;
 
-      if (categoryError) throw categoryError;
+      // Handle "all-products" specially to show all products
+      if (categorySlug === 'all-products') {
+        // Fetch all active products when categorySlug is "all-products"
+        const { data, error: productsError } = await supabase
+          .from('products')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+
+        if (productsError) throw productsError;
+        productsData = data;
+
+        // Set a virtual category for "all-products"
+        categoryData = {
+          id: '00000000-0000-0000-0000-000000000000',
+          name: 'All Products',
+          description: 'Complete selection of all automotive engines, parts, and accessories',
+          slug: 'all-products'
+        };
+      } else {
+        // First fetch the category by slug
+        const { data: catData, error: categoryError } = await supabase
+          .from('categories')
+          .select('*')
+          .eq('slug', categorySlug)
+          .eq('is_active', true)
+          .single();
+
+        if (categoryError) throw categoryError;
+        categoryData = catData;
+        
+        // Then fetch products for this specific category
+        const { data, error: productsError } = await supabase
+          .from('products')
+          .select('*')
+          .eq('category_id', categoryData.id)
+          .eq('is_active', true)
+          .order('created_at', { ascending: false });
+
+        if (productsError) throw productsError;
+        productsData = data;
+      }
+
       setCategory(categoryData);
-
-      // Then fetch products for this category
-      const { data: productsData, error: productsError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('category_id', categoryData.id)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
-
-      if (productsError) throw productsError;
 
       // Transform the data to ensure images is always an array
       const transformedProducts = (productsData || []).map(product => ({
@@ -99,6 +126,7 @@ export const DynamicProductPage = ({
       }));
 
       setProducts(transformedProducts);
+      console.log('Loaded products:', transformedProducts.length, 'for category:', categorySlug);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({

@@ -17,19 +17,27 @@ export const useCart = () => {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (savedCart) {
-      try {
-        setCartItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
+    try {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+      console.log('Loading cart from localStorage:', savedCart);
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart);
+        console.log('Parsed cart:', parsedCart);
+        setCartItems(parsedCart);
       }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      // Clear corrupted cart data
+      localStorage.removeItem(CART_STORAGE_KEY);
     }
   }, []);
 
   // Save cart to localStorage whenever cartItems changes
   useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    if (cartItems.length >= 0) { // Save even if empty to persist cleared cart
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+      console.log('Cart saved to localStorage:', cartItems);
+    }
   }, [cartItems]);
 
   const addToCart = (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
