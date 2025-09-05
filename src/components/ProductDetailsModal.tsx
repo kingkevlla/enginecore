@@ -37,6 +37,11 @@ export const ProductDetailsModal = ({ isOpen, onClose, product }: ProductDetails
   const { addToCart } = useCart();
   const { toast } = useToast();
 
+  // Early return if product is null
+  if (!product) {
+    return null;
+  }
+
   const productImages = Array.isArray(product.images) ? product.images : [product.images];
 
   const handleAddToCart = () => {
