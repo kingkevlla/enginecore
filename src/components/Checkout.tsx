@@ -16,6 +16,277 @@ export const Checkout = () => {
   const { cartItems, getTotalPrice } = useCart();
   const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState("card");
+  const [selectedCountry, setSelectedCountry] = useState("US");
+
+  // World countries list
+  const countries = [
+    { code: "US", name: "United States" },
+    { code: "CA", name: "Canada" },
+    { code: "GB", name: "United Kingdom" },
+    { code: "AU", name: "Australia" },
+    { code: "DE", name: "Germany" },
+    { code: "FR", name: "France" },
+    { code: "IT", name: "Italy" },
+    { code: "ES", name: "Spain" },
+    { code: "NL", name: "Netherlands" },
+    { code: "BE", name: "Belgium" },
+    { code: "CH", name: "Switzerland" },
+    { code: "AT", name: "Austria" },
+    { code: "SE", name: "Sweden" },
+    { code: "NO", name: "Norway" },
+    { code: "DK", name: "Denmark" },
+    { code: "FI", name: "Finland" },
+    { code: "IE", name: "Ireland" },
+    { code: "PT", name: "Portugal" },
+    { code: "PL", name: "Poland" },
+    { code: "CZ", name: "Czech Republic" },
+    { code: "HU", name: "Hungary" },
+    { code: "SK", name: "Slovakia" },
+    { code: "SI", name: "Slovenia" },
+    { code: "HR", name: "Croatia" },
+    { code: "RO", name: "Romania" },
+    { code: "BG", name: "Bulgaria" },
+    { code: "GR", name: "Greece" },
+    { code: "CY", name: "Cyprus" },
+    { code: "MT", name: "Malta" },
+    { code: "LU", name: "Luxembourg" },
+    { code: "IS", name: "Iceland" },
+    { code: "LI", name: "Liechtenstein" },
+    { code: "MC", name: "Monaco" },
+    { code: "SM", name: "San Marino" },
+    { code: "VA", name: "Vatican City" },
+    { code: "AD", name: "Andorra" },
+    { code: "JP", name: "Japan" },
+    { code: "KR", name: "South Korea" },
+    { code: "CN", name: "China" },
+    { code: "HK", name: "Hong Kong" },
+    { code: "TW", name: "Taiwan" },
+    { code: "SG", name: "Singapore" },
+    { code: "MY", name: "Malaysia" },
+    { code: "TH", name: "Thailand" },
+    { code: "PH", name: "Philippines" },
+    { code: "ID", name: "Indonesia" },
+    { code: "VN", name: "Vietnam" },
+    { code: "IN", name: "India" },
+    { code: "PK", name: "Pakistan" },
+    { code: "BD", name: "Bangladesh" },
+    { code: "LK", name: "Sri Lanka" },
+    { code: "MV", name: "Maldives" },
+    { code: "NP", name: "Nepal" },
+    { code: "BT", name: "Bhutan" },
+    { code: "MM", name: "Myanmar" },
+    { code: "KH", name: "Cambodia" },
+    { code: "LA", name: "Laos" },
+    { code: "BN", name: "Brunei" },
+    { code: "TL", name: "Timor-Leste" },
+    { code: "MN", name: "Mongolia" },
+    { code: "KZ", name: "Kazakhstan" },
+    { code: "KG", name: "Kyrgyzstan" },
+    { code: "TJ", name: "Tajikistan" },
+    { code: "TM", name: "Turkmenistan" },
+    { code: "UZ", name: "Uzbekistan" },
+    { code: "AF", name: "Afghanistan" },
+    { code: "IR", name: "Iran" },
+    { code: "IQ", name: "Iraq" },
+    { code: "SY", name: "Syria" },
+    { code: "LB", name: "Lebanon" },
+    { code: "JO", name: "Jordan" },
+    { code: "IL", name: "Israel" },
+    { code: "PS", name: "Palestine" },
+    { code: "SA", name: "Saudi Arabia" },
+    { code: "AE", name: "United Arab Emirates" },
+    { code: "QA", name: "Qatar" },
+    { code: "BH", name: "Bahrain" },
+    { code: "KW", name: "Kuwait" },
+    { code: "OM", name: "Oman" },
+    { code: "YE", name: "Yemen" },
+    { code: "TR", name: "Turkey" },
+    { code: "GE", name: "Georgia" },
+    { code: "AM", name: "Armenia" },
+    { code: "AZ", name: "Azerbaijan" },
+    { code: "RU", name: "Russia" },
+    { code: "BY", name: "Belarus" },
+    { code: "UA", name: "Ukraine" },
+    { code: "MD", name: "Moldova" },
+    { code: "LT", name: "Lithuania" },
+    { code: "LV", name: "Latvia" },
+    { code: "EE", name: "Estonia" },
+    { code: "EG", name: "Egypt" },
+    { code: "LY", name: "Libya" },
+    { code: "TN", name: "Tunisia" },
+    { code: "DZ", name: "Algeria" },
+    { code: "MA", name: "Morocco" },
+    { code: "SD", name: "Sudan" },
+    { code: "SS", name: "South Sudan" },
+    { code: "ET", name: "Ethiopia" },
+    { code: "ER", name: "Eritrea" },
+    { code: "DJ", name: "Djibouti" },
+    { code: "SO", name: "Somalia" },
+    { code: "KE", name: "Kenya" },
+    { code: "UG", name: "Uganda" },
+    { code: "TZ", name: "Tanzania" },
+    { code: "RW", name: "Rwanda" },
+    { code: "BI", name: "Burundi" },
+    { code: "MZ", name: "Mozambique" },
+    { code: "MW", name: "Malawi" },
+    { code: "ZM", name: "Zambia" },
+    { code: "ZW", name: "Zimbabwe" },
+    { code: "BW", name: "Botswana" },
+    { code: "NA", name: "Namibia" },
+    { code: "ZA", name: "South Africa" },
+    { code: "LS", name: "Lesotho" },
+    { code: "SZ", name: "Eswatini" },
+    { code: "MG", name: "Madagascar" },
+    { code: "MU", name: "Mauritius" },
+    { code: "SC", name: "Seychelles" },
+    { code: "KM", name: "Comoros" },
+    { code: "AO", name: "Angola" },
+    { code: "CD", name: "Democratic Republic of the Congo" },
+    { code: "CG", name: "Republic of the Congo" },
+    { code: "CF", name: "Central African Republic" },
+    { code: "TD", name: "Chad" },
+    { code: "CM", name: "Cameroon" },
+    { code: "GQ", name: "Equatorial Guinea" },
+    { code: "GA", name: "Gabon" },
+    { code: "ST", name: "São Tomé and Príncipe" },
+    { code: "GH", name: "Ghana" },
+    { code: "TG", name: "Togo" },
+    { code: "BJ", name: "Benin" },
+    { code: "BF", name: "Burkina Faso" },
+    { code: "CI", name: "Côte d'Ivoire" },
+    { code: "LR", name: "Liberia" },
+    { code: "SL", name: "Sierra Leone" },
+    { code: "GN", name: "Guinea" },
+    { code: "GW", name: "Guinea-Bissau" },
+    { code: "SN", name: "Senegal" },
+    { code: "GM", name: "Gambia" },
+    { code: "ML", name: "Mali" },
+    { code: "NE", name: "Niger" },
+    { code: "NG", name: "Nigeria" },
+    { code: "MR", name: "Mauritania" },
+    { code: "CV", name: "Cape Verde" },
+    { code: "MX", name: "Mexico" },
+    { code: "GT", name: "Guatemala" },
+    { code: "BZ", name: "Belize" },
+    { code: "SV", name: "El Salvador" },
+    { code: "HN", name: "Honduras" },
+    { code: "NI", name: "Nicaragua" },
+    { code: "CR", name: "Costa Rica" },
+    { code: "PA", name: "Panama" },
+    { code: "CU", name: "Cuba" },
+    { code: "JM", name: "Jamaica" },
+    { code: "HT", name: "Haiti" },
+    { code: "DO", name: "Dominican Republic" },
+    { code: "PR", name: "Puerto Rico" },
+    { code: "TT", name: "Trinidad and Tobago" },
+    { code: "BB", name: "Barbados" },
+    { code: "LC", name: "Saint Lucia" },
+    { code: "GD", name: "Grenada" },
+    { code: "VC", name: "Saint Vincent and the Grenadines" },
+    { code: "AG", name: "Antigua and Barbuda" },
+    { code: "KN", name: "Saint Kitts and Nevis" },
+    { code: "DM", name: "Dominica" },
+    { code: "BS", name: "Bahamas" },
+    { code: "CO", name: "Colombia" },
+    { code: "VE", name: "Venezuela" },
+    { code: "GY", name: "Guyana" },
+    { code: "SR", name: "Suriname" },
+    { code: "BR", name: "Brazil" },
+    { code: "EC", name: "Ecuador" },
+    { code: "PE", name: "Peru" },
+    { code: "BO", name: "Bolivia" },
+    { code: "PY", name: "Paraguay" },
+    { code: "UY", name: "Uruguay" },
+    { code: "AR", name: "Argentina" },
+    { code: "CL", name: "Chile" },
+    { code: "FK", name: "Falkland Islands" },
+    { code: "NZ", name: "New Zealand" },
+    { code: "FJ", name: "Fiji" },
+    { code: "PG", name: "Papua New Guinea" },
+    { code: "SB", name: "Solomon Islands" },
+    { code: "VU", name: "Vanuatu" },
+    { code: "NC", name: "New Caledonia" },
+    { code: "PF", name: "French Polynesia" },
+    { code: "WS", name: "Samoa" },
+    { code: "TO", name: "Tonga" },
+    { code: "KI", name: "Kiribati" },
+    { code: "TV", name: "Tuvalu" },
+    { code: "NR", name: "Nauru" },
+    { code: "PW", name: "Palau" },
+    { code: "FM", name: "Micronesia" },
+    { code: "MH", name: "Marshall Islands" }
+  ].sort((a, b) => a.name.localeCompare(b.name));
+
+  // US States for when US is selected
+  const usStates = [
+    { code: "AL", name: "Alabama" },
+    { code: "AK", name: "Alaska" },
+    { code: "AZ", name: "Arizona" },
+    { code: "AR", name: "Arkansas" },
+    { code: "CA", name: "California" },
+    { code: "CO", name: "Colorado" },
+    { code: "CT", name: "Connecticut" },
+    { code: "DE", name: "Delaware" },
+    { code: "FL", name: "Florida" },
+    { code: "GA", name: "Georgia" },
+    { code: "HI", name: "Hawaii" },
+    { code: "ID", name: "Idaho" },
+    { code: "IL", name: "Illinois" },
+    { code: "IN", name: "Indiana" },
+    { code: "IA", name: "Iowa" },
+    { code: "KS", name: "Kansas" },
+    { code: "KY", name: "Kentucky" },
+    { code: "LA", name: "Louisiana" },
+    { code: "ME", name: "Maine" },
+    { code: "MD", name: "Maryland" },
+    { code: "MA", name: "Massachusetts" },
+    { code: "MI", name: "Michigan" },
+    { code: "MN", name: "Minnesota" },
+    { code: "MS", name: "Mississippi" },
+    { code: "MO", name: "Missouri" },
+    { code: "MT", name: "Montana" },
+    { code: "NE", name: "Nebraska" },
+    { code: "NV", name: "Nevada" },
+    { code: "NH", name: "New Hampshire" },
+    { code: "NJ", name: "New Jersey" },
+    { code: "NM", name: "New Mexico" },
+    { code: "NY", name: "New York" },
+    { code: "NC", name: "North Carolina" },
+    { code: "ND", name: "North Dakota" },
+    { code: "OH", name: "Ohio" },
+    { code: "OK", name: "Oklahoma" },
+    { code: "OR", name: "Oregon" },
+    { code: "PA", name: "Pennsylvania" },
+    { code: "RI", name: "Rhode Island" },
+    { code: "SC", name: "South Carolina" },
+    { code: "SD", name: "South Dakota" },
+    { code: "TN", name: "Tennessee" },
+    { code: "TX", name: "Texas" },
+    { code: "UT", name: "Utah" },
+    { code: "VT", name: "Vermont" },
+    { code: "VA", name: "Virginia" },
+    { code: "WA", name: "Washington" },
+    { code: "WV", name: "West Virginia" },
+    { code: "WI", name: "Wisconsin" },
+    { code: "WY", name: "Wyoming" }
+  ];
+
+  // Canadian provinces for when Canada is selected
+  const canadianProvinces = [
+    { code: "AB", name: "Alberta" },
+    { code: "BC", name: "British Columbia" },
+    { code: "MB", name: "Manitoba" },
+    { code: "NB", name: "New Brunswick" },
+    { code: "NL", name: "Newfoundland and Labrador" },
+    { code: "NS", name: "Nova Scotia" },
+    { code: "ON", name: "Ontario" },
+    { code: "PE", name: "Prince Edward Island" },
+    { code: "QC", name: "Quebec" },
+    { code: "SK", name: "Saskatchewan" },
+    { code: "NT", name: "Northwest Territories" },
+    { code: "NU", name: "Nunavut" },
+    { code: "YT", name: "Yukon" }
+  ];
 
   // Use real cart data instead of mock data
   const subtotal = getTotalPrice();
@@ -108,23 +379,85 @@ export const Checkout = () => {
                       <Input id="city" placeholder="New York" className="mt-1" />
                     </div>
                     <div>
-                      <Label htmlFor="state">State</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select state" />
+                      <Label htmlFor="country">Country</Label>
+                      <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                        <SelectTrigger className="bg-background border-white/20 hover:border-white/40 z-50">
+                          <SelectValue placeholder="Select country" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ny">New York</SelectItem>
-                          <SelectItem value="ca">California</SelectItem>
-                          <SelectItem value="tx">Texas</SelectItem>
+                        <SelectContent className="bg-background border-white/20 max-h-60 z-50">
+                          {countries.map((country) => (
+                            <SelectItem key={country.code} value={country.code} className="hover:bg-white/10">
+                              {country.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
                     <div>
-                      <Label htmlFor="zip">ZIP Code</Label>
-                      <Input id="zip" placeholder="10001" className="mt-1" />
+                      <Label htmlFor="state">
+                        {selectedCountry === "US" ? "State" : selectedCountry === "CA" ? "Province" : "State/Province"}
+                      </Label>
+                      <Select>
+                        <SelectTrigger className="bg-background border-white/20 hover:border-white/40 z-40">
+                          <SelectValue placeholder={
+                            selectedCountry === "US" ? "Select state" : 
+                            selectedCountry === "CA" ? "Select province" : 
+                            "Select state/province"
+                          } />
+                        </SelectTrigger>
+                        <SelectContent className="bg-background border-white/20 max-h-60 z-40">
+                          {selectedCountry === "US" && usStates.map((state) => (
+                            <SelectItem key={state.code} value={state.code} className="hover:bg-white/10">
+                              {state.name}
+                            </SelectItem>
+                          ))}
+                          {selectedCountry === "CA" && canadianProvinces.map((province) => (
+                            <SelectItem key={province.code} value={province.code} className="hover:bg-white/10">
+                              {province.name}
+                            </SelectItem>
+                          ))}
+                          {selectedCountry !== "US" && selectedCountry !== "CA" && (
+                            <SelectItem value="other" className="hover:bg-white/10">
+                              Other/Not Applicable
+                            </SelectItem>
+                          )}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
+
+                  <div>
+                    <Label htmlFor="zip">
+                      {selectedCountry === "US" ? "ZIP Code" : 
+                       selectedCountry === "CA" ? "Postal Code" : 
+                       selectedCountry === "GB" ? "Postcode" : 
+                       "Postal Code"}
+                    </Label>
+                    <Input 
+                      id="zip" 
+                      placeholder={
+                        selectedCountry === "US" ? "10001" : 
+                        selectedCountry === "CA" ? "K1A 0A6" : 
+                        selectedCountry === "GB" ? "SW1A 1AA" : 
+                        "Enter postal code"
+                      } 
+                      className="mt-1" 
+                    />
+                  </div>
+
+                  {selectedCountry !== "US" && (
+                    <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                      <p className="text-sm text-blue-400 mb-2">
+                        <strong>International Shipping Notice:</strong>
+                      </p>
+                      <ul className="text-xs text-muted-foreground space-y-1">
+                        <li>• Additional shipping costs and delivery time may apply</li>
+                        <li>• Custom duties and taxes are the responsibility of the recipient</li>
+                        <li>• Some restrictions may apply to certain countries</li>
+                        <li>• Contact us for shipping quotes to your location</li>
+                      </ul>
+                    </div>
+                  )}
 
                   <div className="flex items-center space-x-2">
                     <Checkbox id="saveAddress" />
