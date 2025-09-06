@@ -13,6 +13,7 @@ import ContactPage from "./pages/ContactPage";
 import HelpCenter from "./pages/HelpCenter";
 import ReturnsRefunds from "./pages/ReturnsRefunds";
 import ShippingInfo from "./pages/ShippingInfo";
+import WarrantyInfo from "./pages/WarrantyInfo";
 import PaymentMethods from "./pages/PaymentMethods";
 import TechnicalSupport from "./pages/TechnicalSupport";
 import LiveChat from "./pages/LiveChat";
@@ -62,7 +63,9 @@ const App = () => (
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/returns-refunds" element={<ReturnsRefunds />} />
+          <Route path="/shipping" element={<ShippingInfo />} />
           <Route path="/shipping-info" element={<ShippingInfo />} />
+          <Route path="/warranty" element={<WarrantyInfo />} />
           <Route path="/payment-methods" element={<PaymentMethods />} />
           <Route path="/technical-support" element={<TechnicalSupport />} />
           <Route path="/live-chat" element={<LiveChat />} />
