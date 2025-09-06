@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "@/hooks/useCart";
 
 interface FeaturedProductsProps {
   onShowAllProducts?: () => void;
@@ -10,12 +11,21 @@ interface FeaturedProductsProps {
 
 export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) => {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const navigate = useNavigate();
   
-  const handleAddToCart = (productName: string) => {
+  const handleAddToCart = (product: any) => {
+    addToCart({
+      id: product.id.toString(),
+      name: product.name,
+      price: parseFloat(product.price.replace('$', '').replace(',', '')),
+      image: product.image || '/placeholder.svg',
+      category: product.category || 'Featured Product'
+    });
+    
     toast({
       title: "Added to Cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
@@ -114,7 +124,7 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
                   <Button 
                     size="sm" 
                     variant="futuristic"
-                    onClick={() => handleAddToCart(product.name)}
+                    onClick={() => handleAddToCart(product)}
                   >
                     <ShoppingCart className="h-4 w-4" />
                   </Button>
@@ -162,7 +172,7 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
                   variant="futuristic" 
                   size="sm" 
                   className="w-full"
-                  onClick={() => handleAddToCart(product.name)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   Add to Cart
                 </Button>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/useCart";
 
 interface Product {
   id: number;
@@ -31,20 +32,29 @@ interface SearchResultsProps {
 
 export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   
-  const handleAddToCart = (productName: string, inStock: boolean) => {
-    if (!inStock) {
+  const handleAddToCart = (product: any) => {
+    if (!product.inStock) {
       toast({
         title: "Out of Stock",
-        description: `${productName} is currently out of stock.`,
+        description: `${product.name} is currently out of stock.`,
         variant: "destructive",
       });
       return;
     }
     
+    addToCart({
+      id: product.id.toString(),
+      name: product.name,
+      price: typeof product.price === 'number' ? product.price : parseFloat(product.price.toString().replace('$', '').replace(',', '')),
+      image: product.image || '/placeholder.svg',
+      category: 'Search Result'
+    });
+    
     toast({
       title: "Added to Cart",
-      description: `${productName} has been added to your cart.`,
+      description: `${product.name} has been added to your cart.`,
     });
   };
 
@@ -94,7 +104,7 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
                   <Button 
                     size="sm" 
                     variant="futuristic"
-                    onClick={() => handleAddToCart(product.name, product.inStock)}
+                    onClick={() => handleAddToCart(product)}
                     disabled={!product.inStock}
                   >
                     <ShoppingCart className="h-4 w-4" />
@@ -153,7 +163,7 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
                   size="sm" 
                   className="w-full" 
                   disabled={!product.inStock}
-                  onClick={() => handleAddToCart(product.name, product.inStock)}
+                  onClick={() => handleAddToCart(product)}
                 >
                   {product.inStock ? "Add to Cart" : "Out of Stock"}
                 </Button>
