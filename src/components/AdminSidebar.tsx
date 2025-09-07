@@ -23,6 +23,7 @@ import {
   BarChart3,
   FolderTree,
   Globe,
+  CreditCard,
 } from 'lucide-react';
 
 const adminMenuItems = [
@@ -60,6 +61,11 @@ const adminMenuItems = [
     title: 'Website Content',
     url: '/admin/content',
     icon: Globe,
+  },
+  {
+    title: 'Payment Settings',
+    url: '/admin/payments',
+    icon: CreditCard,
   },
   {
     title: 'Support',

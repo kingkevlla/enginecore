@@ -34,6 +34,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminCategories from "./pages/AdminCategories";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminContent from "./pages/AdminContent";
+import AdminPayments from "./pages/AdminPayments";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
 import CartPage from "./pages/CartPage";
@@ -78,8 +79,9 @@ const App = () => (
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/customers" element={<AdminCustomers />} />
-           <Route path="/admin/settings" element={<AdminSettings />} />
-           <Route path="/admin/content" element={<AdminContent />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/admin/content" element={<AdminContent />} />
+        <Route path="/admin/payments" element={<AdminPayments />} />
           {/* Payment Routes */}
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-cancelled" element={<PaymentCancelled />} />

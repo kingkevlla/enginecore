@@ -24,12 +24,42 @@ export const PaymentGateway = ({
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   
-  // Simplified payment settings - assume both are enabled for now
-  const paymentSettings = {
-    stripe_enabled: true,
-    paypal_enabled: true,
+  const [paymentSettings, setPaymentSettings] = useState({
+    stripe_enabled: false,
+    paypal_enabled: false,
+    crypto_enabled: false,
     test_mode: true
-  };
+  });
+
+  // Load payment settings from database
+  useEffect(() => {
+    const loadPaymentSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('website_settings')
+          .select('*')
+          .in('key', ['stripe_settings', 'paypal_settings', 'crypto_settings']);
+
+        if (error) throw error;
+
+        const settings: any = {};
+        data?.forEach(setting => {
+          settings[setting.key] = setting.value;
+        });
+
+        setPaymentSettings({
+          stripe_enabled: settings.stripe_settings?.enabled || false,
+          paypal_enabled: settings.paypal_settings?.enabled || false,
+          crypto_enabled: settings.crypto_settings?.enabled || false,
+          test_mode: settings.stripe_settings?.test_mode ?? true
+        });
+      } catch (error) {
+        console.error('Error loading payment settings:', error);
+      }
+    };
+
+    loadPaymentSettings();
+  }, []);
 
   const processStripePayment = async () => {
     setLoading(true);
@@ -116,7 +146,64 @@ export const PaymentGateway = ({
     }
   };
 
-  const hasEnabledPayments = paymentSettings.stripe_enabled || paymentSettings.paypal_enabled;
+  const processCryptoPayment = async (currency: string) => {
+    setLoading(true);
+    try {
+      // Get crypto settings
+      const { data, error } = await supabase
+        .from('website_settings')
+        .select('value')
+        .eq('key', 'crypto_settings')
+        .single();
+
+      if (error) throw error;
+
+      const cryptoSettings = data.value as any;
+      let address = '';
+      
+      switch (currency.toLowerCase()) {
+        case 'btc':
+          address = cryptoSettings?.btc_address || '';
+          break;
+        case 'usdt':
+          address = cryptoSettings?.usdt_address || '';
+          break;
+        case 'eth':
+          address = cryptoSettings?.eth_address || '';
+          break;
+        case 'bnb':
+          address = cryptoSettings?.bnb_address || '';
+          break;
+        default:
+          throw new Error('Unsupported cryptocurrency');
+      }
+
+      if (!address) {
+        throw new Error(`${currency.toUpperCase()} address not configured`);
+      }
+
+      toast({
+        title: `${currency.toUpperCase()} Payment`,
+        description: `Send ${amount} ${currency.toUpperCase()} to: ${address}`,
+        duration: 10000,
+      });
+
+      onSuccess?.(`crypto_${currency}_${Date.now()}`);
+    } catch (error: any) {
+      console.error('Crypto payment error:', error);
+      const errorMessage = error.message || 'Cryptocurrency payment failed';
+      toast({
+        title: "Payment Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      onError?.(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const hasEnabledPayments = paymentSettings.stripe_enabled || paymentSettings.paypal_enabled || paymentSettings.crypto_enabled;
 
   if (!hasEnabledPayments) {
     return (
@@ -181,6 +268,46 @@ export const PaymentGateway = ({
               )}
               Pay with PayPal
             </Button>
+          )}
+
+          {paymentSettings.crypto_enabled && (
+            <div className="space-y-2">
+              <p className="text-sm font-medium">Cryptocurrency Options</p>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  onClick={() => processCryptoPayment('btc')}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Bitcoin (BTC)
+                </Button>
+                <Button
+                  onClick={() => processCryptoPayment('usdt')}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  USDT
+                </Button>
+                <Button
+                  onClick={() => processCryptoPayment('eth')}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Ethereum (ETH)
+                </Button>
+                <Button
+                  onClick={() => processCryptoPayment('bnb')}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full"
+                >
+                  BNB
+                </Button>
+              </div>
+            </div>
           )}
         </div>
 
