@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCartSidebar } from "@/components/ShoppingCartSidebar";
+import { useWebsiteSettings } from "@/hooks/useWebsiteSettings";
 
 interface HeaderProps {
   searchQuery: string;
@@ -12,14 +13,15 @@ interface HeaderProps {
 
 export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { getSetting } = useWebsiteSettings();
   
   return (
     <header className="w-full bg-black">
       {/* Top Banner */}
       <div className="bg-gray-800 text-white py-1 px-4">
         <div className="flex items-center justify-between text-xs max-w-7xl mx-auto">
-          <span>FREE SHIPPING ON SELECT ITEMS!</span>
-          <span>PHONE: 719-630-3236</span>
+          <span>{getSetting('free_shipping_text', 'FREE SHIPPING ON SELECT ITEMS!')}</span>
+          <span>PHONE: {getSetting('contact_phone', '719-630-3236')}</span>
         </div>
       </div>
 
@@ -48,10 +50,9 @@ export const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             </div>
           </div>
 
-          {/* Logo - Center */}
           <div className="text-center mx-8">
-            <span className="text-orange-400 text-xl lg:text-2xl font-bold">verified engine</span>
-            <p className="text-xs text-gray-400 hidden sm:block">JOIN THE FUN !!</p>
+            <span className="text-orange-400 text-xl lg:text-2xl font-bold">{getSetting('site_title', 'verified engine')}</span>
+            <p className="text-xs text-gray-400 hidden sm:block">{getSetting('join_text', 'JOIN THE FUN !!')}</p>
           </div>
 
           {/* Actions - Right */}
