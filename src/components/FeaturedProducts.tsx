@@ -11,7 +11,7 @@ interface FeaturedProductsProps {
 
 export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) => {
   const { toast } = useToast();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const navigate = useNavigate();
   
   const handleAddToCart = (product: any) => {
@@ -27,6 +27,10 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
       title: "Added to Cart",
       description: `${product.name} has been added to your cart.`,
     });
+  };
+
+  const isInCart = (productId: number) => {
+    return cartItems.some(item => item.id === productId.toString());
   };
 
   const handleViewProduct = (productName: string) => {
@@ -123,7 +127,7 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
                   </Button>
                   <Button 
                     size="sm" 
-                    variant="futuristic"
+                    variant={isInCart(product.id) ? "secondary" : "futuristic"}
                     onClick={() => handleAddToCart(product)}
                   >
                     <ShoppingCart className="h-4 w-4" />
@@ -169,12 +173,12 @@ export const FeaturedProducts = ({ onShowAllProducts }: FeaturedProductsProps) =
 
                 {/* Add to Cart */}
                 <Button 
-                  variant="futuristic" 
+                  variant={isInCart(product.id) ? "secondary" : "futuristic"} 
                   size="sm" 
                   className="w-full"
                   onClick={() => handleAddToCart(product)}
                 >
-                  Add to Cart
+                  {isInCart(product.id) ? "Added to Cart" : "Add to Cart"}
                 </Button>
               </div>
             </Card>

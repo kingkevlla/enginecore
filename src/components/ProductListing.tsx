@@ -40,7 +40,7 @@ interface Product {
 
 export const ProductListing = () => {
   const { toast } = useToast();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchQuery, setSearchQuery] = useState("");
@@ -164,6 +164,10 @@ export const ProductListing = () => {
     setShowQuickBuy(true);
   };
 
+  const isInCart = (productId: string) => {
+    return cartItems.some(item => item.id === productId);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -283,11 +287,12 @@ export const ProductListing = () => {
                 <Button 
                   size="sm" 
                   className="flex-1"
+                  variant={isInCart(product.id) ? "secondary" : "default"}
                   onClick={() => handleAddToCart(product)}
                   disabled={(product.stock_quantity || 0) <= 0}
                 >
                   <ShoppingCart className="h-3 w-3 mr-1" />
-                  Add to Cart
+                  {isInCart(product.id) ? "Added to Cart" : "Add to Cart"}
                 </Button>
                 <Button 
                   size="sm" 

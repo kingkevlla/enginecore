@@ -32,7 +32,7 @@ interface SearchResultsProps {
 
 export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
   const { toast } = useToast();
-  const { addToCart } = useCart();
+  const { addToCart, cartItems } = useCart();
   
   const handleAddToCart = (product: any) => {
     if (!product.inStock) {
@@ -63,6 +63,10 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
       title: "Product Details",
       description: `Viewing details for ${productName}`,
     });
+  };
+
+  const isInCart = (productId: number) => {
+    return cartItems.some(item => item.id === productId.toString());
   };
   
   if (products.length === 0) return null;
@@ -103,7 +107,7 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
                   </Button>
                   <Button 
                     size="sm" 
-                    variant="futuristic"
+                    variant={isInCart(product.id) ? "secondary" : "futuristic"}
                     onClick={() => handleAddToCart(product)}
                     disabled={!product.inStock}
                   >
@@ -159,13 +163,13 @@ export const SearchResults = ({ products, onClose }: SearchResultsProps) => {
 
                 {/* Add to Cart */}
                 <Button 
-                  variant="futuristic" 
+                  variant={isInCart(product.id) ? "secondary" : "futuristic"} 
                   size="sm" 
                   className="w-full" 
                   disabled={!product.inStock}
                   onClick={() => handleAddToCart(product)}
                 >
-                  {product.inStock ? "Add to Cart" : "Out of Stock"}
+                  {!product.inStock ? "Out of Stock" : isInCart(product.id) ? "Added to Cart" : "Add to Cart"}
                 </Button>
               </CardContent>
             </Card>
